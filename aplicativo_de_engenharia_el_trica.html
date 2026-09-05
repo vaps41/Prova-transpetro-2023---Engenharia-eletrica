@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado TRANSPETRO - Engenharia Elétrica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .correct-answer {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+            color: #065f46;
+        }
+        .wrong-answer {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b;
+        }
+        .missed-correct {
+            background-color: #fef3c7 !important;
+            border-color: #f59e0b !important;
+            color: #92400e;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
+        <header class="mb-8 text-center bg-white p-6 rounded-lg shadow-md border-t-4 border-green-600">
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">Simulado TRANSPETRO</h1>
+            <h2 class="text-xl text-gray-600">Engenharia Elétrica (Processo Seletivo 2023.2)</h2>
+            <p class="text-sm text-gray-500 mt-2">Responda as questões abaixo e clique em "Corrigir Simulado" no final para ver seu resultado.</p>
+        </header>
+
+        <form id="quiz-form">
+            <div id="questions-container" class="space-y-6">
+                <!-- As questões serão injetadas aqui via JavaScript -->
+            </div>
+
+            <div class="mt-8 flex justify-between items-center bg-white p-6 rounded-lg shadow-md">
+                <button type="button" id="submit-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200">
+                    Corrigir Simulado
+                </button>
+                <div id="result-display" class="text-xl font-bold text-gray-800 hidden">
+                    Pontuação: <span id="score" class="text-green-600">0</span> / <span id="total">50</span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                number: 21,
+                text: "O projeto de sistemas de transmissão de energia elétrica deve considerar os parâmetros elétricos das linhas de transmissão. No efeito pelicular que ocorre em corrente alternada, verifica-se que quanto maior é a frequência elétrica do sistema de transmissão,",
+                options: [
+                    "maior é a resistência aparente do condutor da linha, devido à distribuição não uniforme da corrente elétrica resultante da redução da densidade de corrente no centro do condutor.",
+                    "menor é a resistência aparente do condutor da linha, devido à redução da resistividade elétrica na periferia do condutor resultante do aumento de carga elétrica no centro do condutor.",
+                    "maior é a capacitância aparente do condutor da linha, devido ao aumento do campo elétrico na periferia do condutor resultante da redução da carga elétrica no centro do condutor.",
+                    "menor é a capacitância aparente do condutor da linha, devido ao aumento da carga elétrica na periferia do condutor resultante da redução da densidade de corrente no centro do condutor.",
+                    "menor é a condutância paralela aparente dos isoladores da linha, devido ao aumento do campo elétrico na periferia do condutor resultante da redução da densidade de corrente no centro do condutor."
+                ],
+                answer: 0 // A
+            },
+            {
+                number: 22,
+                text: "Os Dispositivos de Proteção contra Surtos (DPS) devem ser instalados corretamente para a garantia da funcionalidade do dispositivo e da proteção da instalação e de seus usuários. Suponha que a linha elétrica de energia que chega à edificação não inclua neutro. Quando instalado junto ao ponto de entrada da linha na edificação ou no quadro de distribuição principal, os DPS",
+                options: [
+                    "se conectam em série, um em cada circuito, a jusante do ponto de entrega da instalação, substituindo o uso dos disjuntores na proteção contra curto-circuito da instalação.",
+                    "não podem ser conectados ao barramento de equipotencialização principal da edificação, sendo cada DPS instalado em paralelo aos terminais de cada disjuntor dos circuitos da instalação.",
+                    "devem ser instalados de modo a conduzir toda a corrente dos circuitos, sendo cada DPS instalado em série com cada disjuntor dos circuitos da instalação.",
+                    "substituem o sistema de aterramento da instalação, e cada DPS provê o potencial terra para cada circuito da instalação.",
+                    "se conectam, cada um, de um lado a um condutor de fase e, do outro, ao barramento de equipotencialização principal da edificação ou à barra dos condutores de proteção do quadro (barra PE)."
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 23,
+                text: "Um transformador monofásico de relação de transformação unitária foi submetido ao ensaio de curto-circuito, com os seguintes resultados: potência ativa igual a 800 W, tensão e corrente de alimentação, respectivamente, de 50 V e 20 A. Considere a corrente de magnetização e as perdas no núcleo do transformador desprezíveis.<br><br>Quando o transformador for alimentado por uma fonte de 400 V no enrolamento primário, e uma carga, composta por uma resistência de 23 ohms em série com uma reatância capacitiva de 1,5 ohms, for conectada no enrolamento secundário, qual será o rendimento expresso percentualmente?",
+                options: ["100", "98", "95", "92", "90"],
+                answer: 3 // D
+            },
+            {
+                number: 24,
+                text: "Um transformador monofásico está operando conectado como um autotransformador com tensão no primário de 300 V e tensão no secundário de 100 V. Nessas condições, o autotransformador tem potência nominal de 60 kVA.<br><br>Qual é a potência nominal do transformador, em quilovolt-ampère, quando operando na sua configuração original, ou seja, sem nenhuma conexão elétrica entre o primário e o secundário?",
+                options: ["120", "60", "40", "30", "20"],
+                answer: 2 // C
+            },
+            {
+                number: 25,
+                text: "Um motor de corrente contínua, com o enrolamento de campo conectado em paralelo com o enrolamento de armadura, é alimentado pela tensão nominal de 200 V nos seus terminais e possui enrolamento de compensação e interpolos, de forma que seu fluxo pode ser considerado constante, independentemente da carga aplicada ao motor. Quando opera a vazio, possui torque induzido igual a zero, consome uma corrente total do alimentador de 10 A e produz uma velocidade de 1800 rpm.<br><br>Considere que a resistência de armadura inclua as resistências do próprio enrolamento de armadura, das escovas, do enrolamento de compensação e dos interpolos.<br><br>Sabendo-se que, quando o motor opera a uma velocidade de 1728 rpm, uma corrente total do alimentador de 170 A é consumida, qual é o valor da resistência da armadura, em miliohms?",
+                options: ["115", "50", "47", "40", "20"],
+                answer: 1 // B
+            },
+            {
+                number: 26,
+                text: "Duas máquinas síncronas trifásicas operam acopladas uma a outra pelos seus eixos dos rotores. Uma máquina tem 6 polos, e a outra tem 8 polos. Uma máquina opera como motor, alimentada por uma fonte de frequência igual a 60 Hz, e a outra opera como gerador.<br><br>Sabendo-se que a frequência da tensão gerada pelo gerador é menor que 60 Hz, qual é o valor, em hertz, dessa frequência?",
+                options: ["80", "50", "45", "40", "4"],
+                answer: 2 // C
+            },
+            {
+                number: 27,
+                text: "Um motor de indução trifásico de quatro polos, 60 Hz, opera com 1,2 kW de perdas Joule no enrolamento do rotor e com potência do rotor (potência total transferida através do entreferro desde o estator) igual a 50 kW.<br><br>Nessas condições, qual é a velocidade, em rpm, de operação do motor?",
+                options: ["1800,0", "1798,9", "1756,8", "1755,7", "1171,2"],
+                answer: 2 // C
+            },
+            {
+                number: 28,
+                text: "Existem diversos procedimentos de acionamento de motores para partida que se propõem a condicionar a corrente e o torque de partida. Sendo assim, verifica-se que, na partida do motor",
+                options: [
+                    "de corrente contínua, o procedimento de acionamento deve garantir a inexistência de corrente elétrica no enrolamento de campo do motor para que, assim, haja torque de partida.",
+                    "de corrente contínua, deve ser utilizado um motor de indução auxiliar para, assim, alcançar velocidade próxima à velocidade síncrona antes de alimentar a armadura com tensão nominal, garantindo sincronismo e baixa corrente de partida.",
+                    "de indução de rotor bobinado, o procedimento de acionamento deve garantir inicialmente a menor resistência rotórica possível para que, assim, haja o maior torque de partida possível do motor.",
+                    "de indução, o procedimento de acionamento, com controle da razão entre a amplitude da tensão e a frequência de alimentação, possibilita uma menor corrente de partida com maior torque de partida com relação à corrente e ao torque obtidos na partida direta com tensão nominal.",
+                    "síncrono, a aplicação de corrente alternada de frequência progressiva no enrolamento de campo possibilita uma menor corrente de partida, com aumento gradativo da velocidade até valores próximos da velocidade síncrona."
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 29,
+                text: "Os relés de proteção são parte integrante das subestações de energia elétrica e exercem distintas funções. O relé de proteção com função de falha de disjuntor, com identificação 50 BF, atua comandando",
+                options: [
+                    "com retardo a abertura de disjuntor(es) para, assim, ser realizado ensaio de coordenação e de seletividade de proteção no trecho do ramal.",
+                    "com avanço a abertura de disjuntor a jusante do circuito para, assim, ser evitada falha de coordenação e de seletividade de proteção no trecho do ramal.",
+                    "o religamento de disjuntor(es), após detecção de atuação indevida de abertura de circuito, devido à corrente de inrush.",
+                    "a abertura do(s) disjuntor(es) adjacente(s) ao disjuntor em que tenha sido detectada falha no processo de abertura de circuito.",
+                    "o fechamento do disjuntor de by-pass ao disjuntor em que tenha sido detectada falha no processo de fechamento de circuito."
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 30,
+                text: "O correto dimensionamento dos componentes de uma instalação elétrica é necessário para a garantia da segurança da instalação e de seus usuários. Nesse sentido, deve haver a coordenação entre os dispositivos de proteção e os condutores no dimensionamento para proteção contra sobrecarga de um determinado circuito.<br><br>Considere \\(I_d\\) a corrente nominal do dispositivo de proteção, \\(I_c\\) a capacidade de condução de corrente elétrica dos condutores, ambas estabelecidas nas condições previstas de instalação, e \\(I_L\\) a corrente de projeto para atendimento da carga de um determinado circuito.<br><br>Para a garantia da coordenação no dimensionamento dos condutores e do dispositivo de proteção contra sobrecarga do circuito, qual deve ser a relação estabelecida entre essas correntes?",
+                options: [
+                    "\\(I_d \\le I_c \\le I_L\\)",
+                    "\\(I_d \\le I_L \\le I_c\\)",
+                    "\\(I_c \\le I_d \\le I_L\\)",
+                    "\\(I_c \\le I_L \\le I_d\\)",
+                    "\\(I_L \\le I_d \\le I_c\\)"
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 31,
+                text: "Em um projeto de sistema de aterramento, foi adotado o esquema de aterramento TT, que possui",
+                options: [
+                    "um ponto da alimentação diretamente aterrado, com eletrodo de aterramento eletricamente distinto do(s) eletrodo(s) que se liga(m) às massas da instalação.",
+                    "um ponto da alimentação diretamente aterrado, com as massas da instalação ligadas a esse ponto através de condutores de proteção.",
+                    "um ponto de alimentação aterrado através de impedância, e as massas da instalação aterradas através de eletrodo(s) de aterramento próprio(s).",
+                    "nenhum ponto da alimentação diretamente aterrado, e as massas da instalação aterradas através de eletrodo(s) de aterramento próprio(s).",
+                    "dois pontos da alimentação diretamente aterrados a eletrodos de aterramento distintos, sendo as massas da instalação não aterradas."
+                ],
+                answer: 0
+            },
+            {
+                number: 32,
+                text: "Os seccionadores são componentes importantes de uma subestação de energia e podem desempenhar diferentes funções. Os seccionadores de aterramento, ou seccionadores com lâmina de aterramento, utilizam a lâmina de aterramento, após a abertura dos seccionadores, para",
+                options: [
+                    "isolar as carcaças dos seccionadores da malha de terra da subestação, extinguindo o arco elétrico formado entre a fase e o potencial terra da subestação.",
+                    "conectar no potencial terra os circuitos associados aos dispositivos seccionados, garantindo a realização de manutenção com segurança.",
+                    "conectar o sistema de proteção contra descargas atmosféricas à malha de terra da subestação, evitando a exposição dos componentes da subestação à incidência de raios.",
+                    "separar duas ou mais malhas de terra da subestação, permitindo a operação em diferentes esquemas de aterramento.",
+                    "enviar o sinal de abertura dos seccionadores aos sistemas auxiliares de proteção da subestação, permitindo o monitoramento do estado operativo dos seccionadores."
+                ],
+                answer: 1
+            },
+            {
+                number: 33,
+                text: "Um equipamento elétrico monofásico solicita da fonte de tensão de \\(250\\angle-40^{\\circ}\\text{ V}\\) uma potência aparente de 1500 VA com fator de potência de \\(\\cos(10^{\\circ})\\).<br><br>A impedância dessa carga é igual a",
+                options: [
+                    "\\(41,67\\angle-10^{\\circ}\\)",
+                    "\\(46,67\\angle-50^{\\circ}\\)",
+                    "\\(46,67\\angle-30^{\\circ}\\)",
+                    "\\(6,00\\angle30^{\\circ}\\)",
+                    "\\(6,00\\angle-10^{\\circ}\\)"
+                ],
+                answer: 0
+            },
+            {
+                number: 34,
+                text: "Um sistema trifásico equilibrado, composto por uma fonte trifásica na configuração estrela e sequência de fases ACB, alimenta uma carga trifásica com característica indutiva de 7,5 kW e fator de potência de 0,5.<br><br>Sabendo-se que a fase A da fonte é de 250 V e ângulo \\(20^{\\circ}\\), a corrente elétrica que passa na fase B da carga é igual a",
+                options: [
+                    "\\(30\\angle80^{\\circ}\\)",
+                    "\\(30\\angle-160^{\\circ}\\)",
+                    "\\(20\\angle80^{\\circ}\\)",
+                    "\\(20\\angle-160^{\\circ}\\)",
+                    "\\(10\\angle80^{\\circ}\\)"
+                ],
+                answer: 2
+            },
+            {
+                number: 35,
+                text: "A respeito dos aparelhos eletrônicos de medidas, ohmímetros, voltímetros e amperímetros, utilizados em laboratório para medições de grandezas elétricas, constata-se que",
+                options: [
+                    "a Potência Ativa é o resultado da multiplicação das grandezas de corrente e tensão, respectivamente, medidas por meio de um amperímetro e de um voltímetro sobre uma carga.",
+                    "a medição da resistência elétrica é obtida sempre de forma indireta, por meio de outras grandezas elétricas medidas.",
+                    "a ponte de Wheatstone revela-se como um dos meios mais empregados para medição de tensões, onde a diferença de potencial a ser medida ocupa a posição de um dos resistores da ponte.",
+                    "o amperímetro, tipo alicate, mede a corrente elétrica de forma direta, sem a intermediação de outra grandeza.",
+                    "o voltímetro mede a diferença de potencial em um ponto, sem a necessidade de interrupção do circuito."
+                ],
+                answer: 1
+            },
+            {
+                number: 36,
+                text: "Na figura da prova original, é apresentado o diagrama de sequência zero de um transformador (contendo uma impedância série Z e uma derivação 3Zn para a referência no lado primário, e o lado secundário aberto). Esse diagrama corresponde ao transformador",
+                options: [
+                    "Estrela-Estrela, com primário e secundário aterrados por impedância.",
+                    "Estrela-Delta, com primário não aterrado.",
+                    "Estrela-Estrela, com primário aterrado e secundário não aterrado.",
+                    "Estrela-Delta, com primário aterrado.",
+                    "Delta-Delta."
+                ],
+                answer: 2
+            },
+            {
+                number: 37,
+                text: "Um equipamento elétrico trifásico na configuração estrela possui como dados elétricos a potência de 400 kVA e a tensão de alimentação de 10 kV. A potência e a tensão de bases escolhidas para o setor onde esse equipamento se encontra instalado é de 100 kVA e 10 kV.<br><br>A sua impedância, por unidade (p.u.), é",
+                options: [
+                    "0,05",
+                    "0,10",
+                    "0,15",
+                    "0,20",
+                    "0,25"
+                ],
+                answer: 4
+            },
+            {
+                number: 38,
+                text: "A matriz abaixo apresenta a relação das grandezas elétricas das fases A, B e C com suas respectivas componentes simétricas:<br><br>\\[ \\begin{bmatrix} A \\\\ B \\\\ C \\end{bmatrix} \\rightarrow \\begin{bmatrix} 1 & 1 & 1 \\\\ a^2 & a & 1 \\\\ a & a^2 & 1 \\end{bmatrix} \\]<br><br>As componentes simétricas associadas a cada coluna (da esquerda para a direita) são, respectivamente, de sequências:",
+                options: [
+                    "negativa, zero e positiva",
+                    "negativa, positiva e zero",
+                    "positiva, zero e negativa",
+                    "positiva, negativa e zero",
+                    "zero, positiva e negativa"
+                ],
+                answer: 3
+            },
+            {
+                number: 39,
+                text: "O diagrama unifilar tem a finalidade de simplificar a diagramação de um sistema elétrico. Nele, as cargas são representadas por uma única fase, onde as tensões, corrente e impedância fazem referência às tensões",
+                options: [
+                    "de linha, corrente de linha e impedância de uma das fases da carga para carga na configuração estrela ou no seu equivalente estrela para as cargas na configuração delta.",
+                    "de linha, corrente de linha e uma das impedâncias que compõem a carga trifásica para carga na configuração estrela ou na configuração delta.",
+                    "de linha, corrente de linha e uma das impedâncias que compõem a carga trifásica na configuração estrela ou tensões de linha, corrente de fase e uma das impedâncias que compõem a carga trifásica no seu equivalente estrela para as cargas na configuração delta.",
+                    "de linha, corrente de linha e uma das impedâncias que compõem a carga trifásica na configuração estrela ou tensões de fase, corrente de fase e uma das impedâncias que compõem a carga trifásica no seu equivalente estrela para as cargas na configuração delta.",
+                    "de fase, corrente de fase e impedância de uma das fases da carga para carga na configuração estrela ou no seu equivalente estrela para as cargas na configuração delta."
+                ],
+                answer: 0
+            },
+            {
+                number: 40,
+                text: "A matriz transformação inversa apresentada abaixo relaciona os componentes simétricos aos seus respectivos fasores, considerando as condições de contorno de uma falta:<br><br>\\[ \\begin{bmatrix} i_1 \\\\ i_2 \\\\ i_0 \\end{bmatrix} = \\frac{1}{3} \\begin{bmatrix} 1 & \\alpha & \\alpha^2 \\\\ 1 & \\alpha^2 & \\alpha \\\\ 1 & 1 & 1 \\end{bmatrix} \\times \\begin{bmatrix} 0 \\\\ \\bar{i}_b \\\\ -\\bar{i}_b \\end{bmatrix} \\]<br><br>O tipo de falta que essa matriz apresenta nas suas condições de contorno é",
+                options: [
+                    "abertura da fase A",
+                    "abertura das fases A e B",
+                    "curto-circuito simétrico",
+                    "curto-circuito fase-terra",
+                    "curto-circuito fase-fase"
+                ],
+                answer: 4
+            },
+            {
+                number: 41,
+                text: "A corrente no secundário de um transformador de corrente suprindo uma determinada carga é de 3,5 A. O valor da corrente no circuito primário sem correção, sabendo-se que o TC é de 400-5A, é igual a",
+                options: [
+                    "395 A",
+                    "350 A",
+                    "280 A",
+                    "114 A",
+                    "80 A"
+                ],
+                answer: 2
+            },
+            {
+                number: 42,
+                text: "Apresenta-se um sistema trifásico composto por uma fonte alimentando uma carga, com medição por três wattímetros. Sabendo-se que a carga é equilibrada, e que as medidas dos Wattímetros \\(W_1\\), \\(W_2\\) e \\(W_3\\) são iguais a, respectivamente, 30 W, 45 W e 65 W, a potência trifásica ativa solicitada pela fonte é igual a",
+                options: [
+                    "140 W",
+                    "95 W",
+                    "75 W",
+                    "35 W",
+                    "15 W"
+                ],
+                answer: 2
+            },
+            {
+                number: 43,
+                text: "Seja \\(\\mathbb{C}\\) o conjunto dos números complexos e a função \\(G: \\mathbb{C} \\rightarrow \\mathbb{C}\\), tal que<br><br>\\[ G(s) = \\frac{5(s-2)}{(s+2)} \\]<br><br>Se \\(s=2j\\), qual deverá ser o ângulo de fase, em graus, de \\(G(s)\\)?",
+                options: [
+                    "45°",
+                    "90°",
+                    "135°",
+                    "180°",
+                    "315°"
+                ],
+                answer: 1
+            },
+            {
+                number: 44,
+                text: "Considere um circuito resistivo conectado à carga de 10 \\(\\Omega\\) por meio dos terminais 1 e 2. O circuito (ponte) é composto por uma fonte de 12V e resistores de 10\\(\\Omega\\), 5\\(\\Omega\\), 10\\(\\Omega\\), 20\\(\\Omega\\) e um resistor central de 10\\(\\Omega\\). Se o circuito apresentado for substituído por seu equivalente de Thevenin, qual deverá ser o valor de \\(R_{Th}\\) em ohms? (Considere o circuito da figura original da prova)",
+                options: [
+                    "15",
+                    "20",
+                    "25",
+                    "30",
+                    "35"
+                ],
+                answer: 0
+            },
+            {
+                number: 45,
+                text: "Analisando-se um gráfico obtido pelo método do Lugar das Raízes (Root Locus) com polos em -1 e +2 e polos complexos, observa-se que os ramos saem e cruzam o eixo imaginário. Pode-se afirmar que, com o aumento do ganho K, o sistema em malha fechada é",
+                options: [
+                    "sempre estável, para qualquer valor de ganho de realimentação K > 0.",
+                    "sempre instável, para qualquer valor de ganho de realimentação K > 0.",
+                    "inicialmente instável, mas se torna estável a partir de certo valor de ganho K.",
+                    "inicialmente estável, mas se torna instável a partir de certo valor de ganho K.",
+                    "inicialmente estável, mas se torna instável em uma faixa de valores de ganho K."
+                ],
+                answer: 4
+            },
+            {
+                number: 46,
+                text: "Um sistema foi modelado pela seguinte função de transferência:<br><br>\\[ G(s) = \\frac{5(s+1)}{(s+2+3j)(s+2-3j)} \\]<br><br>Caso esse modelo seja representado em espaço de estado, com a matriz da dinâmica no formato \\( A = \\begin{bmatrix} a & b \\\\ 1 & 0 \\end{bmatrix} \\), qual deverá ser o valor de b?",
+                options: [
+                    "-13",
+                    "-4",
+                    "0",
+                    "4",
+                    "13"
+                ],
+                answer: 0
+            },
+            {
+                number: 47,
+                text: "Considere um sistema monovariável modelado em espaço de estado por:<br><br>\\[ \\dot{\\mathbf{x}} = \\begin{bmatrix} -7 & 1 \\\\ -12 & 0 \\end{bmatrix} \\mathbf{x} + \\begin{bmatrix} -16 \\\\ -40 \\end{bmatrix} u \\]<br>\\[ y = \\begin{bmatrix} 1 & 0 \\end{bmatrix} \\mathbf{x} + 4u \\]<br><br>Transformando-se esse modelo numa função de transferência, em que posições do plano s estarão localizados seus zeros?",
+                options: [
+                    "-3 e -4",
+                    "-2 e -4",
+                    "-2 e -3",
+                    "-1 e -3",
+                    "-1 e -2"
+                ],
+                answer: 2
+            },
+            {
+                number: 48,
+                text: "Considere um circuito RC série com uma fonte DC de 12V, resistor de 10 k\\(\\Omega\\) e capacitor de 1 mF. O capacitor está inicialmente descarregado. No instante t=0, a chave S é fechada.<br><br>Qual deverá ser a expressão do valor da tensão \\(V_0\\) de saída (tensão no capacitor), em volts, no instante t = 30 s?",
+                options: [
+                    "\\(12(1-e^{-0,3})\\)",
+                    "\\(12(1-e^{-1})\\)",
+                    "\\(12(1-e^{-3})\\)",
+                    "\\(12(1-e^{-10})\\)",
+                    "\\(12(1-e^{-30})\\)"
+                ],
+                answer: 2
+            },
+            {
+                number: 49,
+                text: "Na análise de um circuito trifásico por meio de suas componentes simétricas, foram identificados os seguintes valores de sequência da tensão da fase A:<br>• positiva: \\(10\\angle30^{\\circ}\\text{ V}\\)<br>• negativa: \\(6\\angle330^{\\circ}\\text{ V}\\)<br>• zero: \\(3\\angle0^{\\circ}\\text{ V}\\)<br><br>Diante do exposto, o valor da tensão da fase B, em V, é de",
+                options: [
+                    "\\(5\\angle-\\arctan(3/4)\\)",
+                    "\\(5\\angle\\arctan(4/3)\\)",
+                    "\\(4\\angle\\arctan(1)\\)",
+                    "\\(3\\angle\\arctan(0)\\)",
+                    "\\(5\\angle-\\arctan(4/3)\\)"
+                ],
+                answer: 4
+            },
+            {
+                number: 50,
+                text: "Um gerador de um sistema elétrico de potência (SEP) hipotético, ligado em Y, possui uma potência de \\(15\\sqrt{3}\\text{ MVA}\\) e uma tensão de armadura de 10 kV. Sabe-se que as reatâncias de sequências positiva, negativa e zero são, respectivamente, j 0,5 pu, j 0,3 pu e j 0,2 pu. Durante a execução dos testes de seu comissionamento, o gerador é colocado em operação em vazio, com tensão terminal nominal e, acidentalmente, ocorre um curto fase e terra.<br><br>Diante do exposto, o módulo da corrente de falta, em kA, é",
+                options: [
+                    "1,5",
+                    "3,0",
+                    "4,5",
+                    "6,0",
+                    "9,0"
+                ],
+                answer: 2
+            },
+            {
+                number: 51,
+                text: "Um circuito monofásico é composto por uma fonte de tensão \\(E_A = 150\\angle90^{\\circ}\\text{ V}\\) conectada a uma carga por meio de um cabo de impedância Z. Nas condições atuais de funcionamento, a carga opera com uma tensão terminal \\(V_\\phi = 120\\angle0^{\\circ}\\text{ V}\\) e corrente \\(I_L = 10\\angle45^{\\circ}\\text{ A}\\).<br><br>Diante do exposto, conclui-se que o valor da resistência do cabo, em \\(\\Omega\\), é de",
+                options: [
+                    "1,5",
+                    "\\(1,5\\sqrt{2}\\)",
+                    "\\(1,5\\sqrt{3}\\)",
+                    "\\(7,5\\sqrt{2}\\)",
+                    "\\(6,0\\sqrt{3}\\)"
+                ],
+                answer: 1
+            },
+            {
+                number: 52,
+                text: "A equipe de manutenção de uma empresa precisa realizar a medição da potência de uma máquina monofásica. Usando um osciloscópio, a tensão foi medida nos terminais: \\(V_{\\text{carga}}(t) = 250 \\cos(377t + 30^{\\circ})\\text{ V}\\) e a corrente num shunt em série: \\(V_{\\text{shunt}}(t) = 10 \\cos(377t + 60^{\\circ})\\text{ V}\\). Desprezando a potência dissipada no resistor shunt e sabendo que sua resistência é de 100 m\\(\\Omega\\), a potência ativa da máquina, em W, é de",
+                options: [
+                    "\\(625\\sqrt{3}\\)",
+                    "\\(625\\sqrt{2}\\)",
+                    "\\(1250\\sqrt{3}\\)",
+                    "\\(1250\\sqrt{2}\\)",
+                    "1250"
+                ],
+                answer: 0
+            },
+            {
+                number: 53,
+                text: "Em uma auditoria de rotina em uma empresa, foi identificada uma irregularidade na capacitação dos empregados designados para trabalharem em suas instalações elétricas. Após a análise da documentação da empresa, de seus funcionários e de sua forma de trabalho, a capacitação teve que ser revogada porque",
+                options: [
+                    "os empregados capacitados não possuíam graduação em engenharia elétrica.",
+                    "os empregados capacitados não possuíam curso técnico em eletrotécnica.",
+                    "o profissional que realizou a capacitação não possuía registro no competente conselho de classe.",
+                    "os empregados capacitados não possuíam qualificação para o trabalho em instalações elétricas.",
+                    "o empregado capacitado estava trabalhando sob a supervisão de profissional habilitado e autorizado."
+                ],
+                answer: 2
+            },
+            {
+                number: 54,
+                text: "A equipe de engenharia de uma empresa hipotética deverá fazer o ajuste de um relé de sobrecorrente de fase a ser instalado no lado de alta tensão de um transformador de potência trifásico de \\(2500\\sqrt{3}\\text{ kVA}\\), 40 kV - 200 V, \\(\\Delta-Y\\). Sabe-se que o transformador admite uma sobrecarga de 20%, e que o transformador de corrente empregado no sistema é de 100:5 A.<br><br>Diante do exposto, verifica-se que a máxima corrente de sobrecarga vista pelo relé, em A, é:",
+                options: [
+                    "1,25",
+                    "2,50",
+                    "3,25",
+                    "3,75",
+                    "4,15"
+                ],
+                answer: 3
+            },
+            {
+                number: 55,
+                text: "De modo a permitir alterações em seu regime de funcionamento, o motor de indução bobinado possibilita a inserção de resistências adicionais no circuito do rotor por meio de escovas conectadas ao seu eixo. Considere um motor de indução trifásico (MIT) bobinado com as seguintes características: 60 Hz, 8 polos, 440 V, e Resistência do rotor de 0,2 \\(\\Omega\\).<br><br>Sabendo-se que o torque nominal do motor ocorre com um escorregamento de 4%, o valor da resistência a ser adicionada ao circuito do rotor, em \\(\\Omega\\), para que o torque nominal ocorra com um escorregamento de 10%, é de",
+                options: [
+                    "0,2",
+                    "0,3",
+                    "0,4",
+                    "0,5",
+                    "1,0"
+                ],
+                answer: 1
+            },
+            {
+                number: 56,
+                text: "Uma empresa possui, atualmente instalado em sua subestação, um transformador de 20 kVA, 12 kV - 200 V, \\(\\Delta-Y\\). Dados de placa do gerador instalado na empresa indicam que ele tem uma reatância percentual de 5%, calculada nas bases de potência e tensão do gerador atual. Deve-se instalar um novo transformador em paralelo, com as mesmas especificações. Para que a potência seja distribuída igualmente entre os dois transformadores, a reatância, em \\(\\Omega\\), referida para o lado de baixa tensão do novo transformador é de",
+                options: [
+                    "0,01",
+                    "0,05",
+                    "0,1",
+                    "0,2",
+                    "1,0"
+                ],
+                answer: 2
+            },
+            {
+                number: 57,
+                text: "Com o objetivo de realizar o projeto de um sistema de aterramento, a equipe técnica realiza uma série de medidas empregando o método de Wenner. O gráfico espaçamento (a) pela resistividade (\\(\\rho\\)) apresenta três variações bruscas de inclinação (patamares/quedas na curva original). De acordo com o perfil da curva, o número de camadas estratificadas do solo é",
+                options: [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                ],
+                answer: 4
+            },
+            {
+                number: 58,
+                text: "A equipe de licitação de uma empresa hipotética está envolvida na elaboração do processo para a aquisição de ferramentas, equipamentos de proteção individual (EPI) e equipamentos de proteção coletiva (EPC). Durante a fase inicial do processo, verificou-se que todos os itens podem ser bem definidos no edital. Em face do exposto, a modalidade de licitação a ser escolhida pela administração para a aquisição dos bens é o(a)",
+                options: [
+                    "diálogo competitivo",
+                    "concurso",
+                    "pregão",
+                    "leilão",
+                    "concorrência"
+                ],
+                answer: 2
+            },
+            {
+                number: 59,
+                text: "Em um prédio comercial hipotético, o quadro de distribuição de um escritório é conectado ao medidor por meio de um alimentador trifásico a 4 fios, tensão de linha de 220 V. A carga instalada é de 45 kW, e a distância é de 10 m.<br><br>Adotando-se uma máxima queda de tensão de 4%, utilizando a tabela fornecida (Soma das potências x distância para V=127V / queda 4%:<br>4 mm²: 74839<br>6 mm²: 112258<br>10 mm²: 187096<br>16 mm²: 299354<br>25 mm²: 467741), a seção do alimentador, em mm², é",
+                options: [
+                    "4",
+                    "6",
+                    "10",
+                    "16",
+                    "25"
+                ],
+                answer: 4
+            },
+            {
+                number: 60,
+                text: "Uma linha de transmissão pode ser modelada como uma malha infinita de capacitores todos de capacitâncias iguais a C (dispostos como uma escada onde os capacitores série e paralelo são iguais). A capacitância equivalente entre os terminais de entrada A e B é:",
+                options: [
+                    "\\(\\frac{C(1+\\sqrt{2})}{2}\\)",
+                    "\\(\\frac{C(1+\\sqrt{3})}{2}\\)",
+                    "\\(\\frac{C(1+\\sqrt{3})}{4}\\)",
+                    "\\(\\frac{C(1+2\\sqrt{2})}{4}\\)",
+                    "\\(\\frac{C(1+3\\sqrt{2})}{4}\\)"
+                ],
+                answer: 2
+            },
+            {
+                number: 61,
+                text: "A equação abaixo foi proposta por Bond para associar a energia E por quantidade de massa necessária para quebrar partículas de minério, de forma que elas passem de diâmetro \\(d_1\\) para diâmetro \\(d_2\\), onde \\(d_2 < d_1\\).<br><br>\\[ E = 2K \\left\\{ \\frac{1}{\\sqrt{d_2}} - \\frac{1}{\\sqrt{d_1}} \\right\\} \\]<br><br>A dimensão da constante de Bond K da equação pode ser escrita como",
+                options: [
+                    "\\(m^{-1/2} kg\\ W\\ s\\)",
+                    "\\(m^{1/2} kg^{-1} W\\ s^{-1}\\)",
+                    "\\(m^{1/2} kg^{-1} W\\)",
+                    "\\(m^{-1/2} kg^{-1} W\\)",
+                    "\\(m^{-1/2} kg\\ W\\ s^{-1}\\)"
+                ],
+                answer: 0
+            },
+            {
+                number: 62,
+                text: "Um circuito retificou a rede elétrica residencial de tensão eficaz monofásica V, de forma a oferecer uma saída onde em 50% do tempo é S, e nos outros 50% é -S, onde S é o valor de pico da onda senoidal da rede.<br><br>Sendo assim, o circuito oferece uma tensão eficaz igual a",
+                options: [
+                    "\\(2V\\)",
+                    "\\(\\pi V\\)",
+                    "\\(\\sqrt{2} V\\)",
+                    "\\(\\sqrt{3} V\\)",
+                    "\\(\\frac{\\pi V}{2}\\)"
+                ],
+                answer: 1
+            },
+            {
+                number: 63,
+                text: "Uma partícula segue um movimento retilíneo no \\(\\mathbb{R}^3\\) com velocidade constante \\(v = (1,2,2)\\), até entrar numa região que provoca um vetor aceleração A sobre a partícula, tal que \\(A = (2,-2,1) \\times v\\) onde \\(\\times\\) denota o produto vetorial. Enquanto estiver na região, a partícula descreverá um(a)",
+                options: [
+                    "arco de círculo de raio 1",
+                    "arco de círculo de raio 3",
+                    "arco de parábola",
+                    "trajetória helicoidal",
+                    "trajetória retilínea"
+                ],
+                answer: 2
+            },
+            {
+                number: 64,
+                text: "Sabe-se que a Transformada de Laplace da função: \\(f(t) = e^{at}\\), para \\(t \\ge 0\\), onde \\(a\\) é uma constante Real, é \\(F(s) = \\frac{1}{s-a}\\).<br><br>Aplicando-se as propriedades da Transformada de Laplace, a Transformada Inversa de \\(G(s) = \\frac{1}{s^2 - 5s + 6}\\), para \\(t \\ge 0\\), é",
+                options: [
+                    "\\(g(t) = e^{2t} + e^{3t}\\)",
+                    "\\(g(t) = e^{-2t} + e^{-3t}\\)",
+                    "\\(g(t) = e^{2t} - e^{3t}\\)",
+                    "\\(g(t) = e^{3t} - e^{2t}\\)",
+                    "\\(g(t) = e^{3t} + e^t\\)"
+                ],
+                answer: 3
+            },
+            {
+                number: 65,
+                text: "Considere a função de uma variável complexa \\(f(z) = \\frac{1}{z+1}\\), onde \\(z = x + jy\\). Decompondo-se a função f(z) em partes real e imaginária, obtém-se \\(f(z) = f(x,y) = u(x,y) + jv(x,y)\\). Qual é a expressão da função v(x,y)?",
+                options: [
+                    "\\(v(x,y) = \\frac{x}{x^2 + y^2}\\)",
+                    "\\(v(x,y) = \\frac{-y}{x^2 + y^2 + 2x + 1}\\)",
+                    "\\(v(x,y) = \\frac{y}{x^2 + y^2 + 2x + 1}\\)",
+                    "\\(v(x,y) = \\frac{x+1}{x^2 + y^2 + 2x + 1}\\)",
+                    "\\(v(x,y) = \\frac{2}{x^2 + y^2 + 2x}\\)"
+                ],
+                answer: 1
+            },
+            {
+                number: 66,
+                text: "Uma sequência discreta e causal tem sua lei de formação dada por: \\(x(n) = \\alpha x(n-1) + \\beta x(n-2) + \\delta(n)\\) para \\(n \\ge 0\\), sendo que \\(x(n) = 0\\) para \\(n < 0\\). \\(\\delta(n)\\) é o Impulso Unitário discreto.<br>As primeiras cinco amostras dessa sequência são: \\(x(0)=1\\); \\(x(1)=2\\); \\(x(2)=7\\); \\(x(3)=20\\); \\(x(4)=61\\);<br><br>A expressão de \\(X(z)\\), que é a Transformada Z dessa sequência, é dada por",
+                options: [
+                    "\\(X(z) = \\frac{z^2 - 1}{z^2 - 2z - 3}\\)",
+                    "\\(X(z) = \\frac{z}{z^2 - 2z - 3}\\)",
+                    "\\(X(z) = \\frac{z^2}{z^2 - 2z - 3}\\)",
+                    "\\(X(z) = \\frac{1}{z^2 - 2z - 3}\\)",
+                    "\\(X(z) = \\frac{z^2}{z^2 + 2z + 3}\\)"
+                ],
+                answer: 2
+            },
+            {
+                number: 67,
+                text: "Para um circuito RL série onde a entrada é uma tensão u(t) e a corrente é i(t), e as condições iniciais são nulas, qual é a expressão da corrente elétrica i(t), para \\(t \\ge 0\\), quando u(t) é uma tensão do tipo DEGRAU de amplitude igual a E?",
+                options: [
+                    "\\(i(t) = \\frac{E}{R}(1 - e^{-\\frac{R}{L}t})\\)",
+                    "\\(i(t) = \\frac{E}{R}e^{-\\frac{R}{L}t}\\)",
+                    "\\(i(t) = E(1 - e^{-\\frac{R}{L}t})\\)",
+                    "\\(i(t) = Ee^{-\\frac{R}{L}t}\\)",
+                    "\\(i(t) = \\frac{E}{R}(1 - e^{-\\frac{t}{RL}})\\)"
+                ],
+                answer: 0
+            },
+            {
+                number: 68,
+                text: "A Função de Transferência em Laplace, mostrada a seguir, corresponde a um sistema linear, contínuo e de terceira ordem, operando em malha fechada em função de um ganho K.<br><br>\\[ G_{mf}(s) = \\frac{K}{s^3 + 6s^2 + (50 - K)s + 3K - 75} \\]<br><br>Para um determinado valor do ganho K, um dos polos do sistema estará na origem do plano s, e os outros dois polos estarão nas posições",
+                options: [
+                    "\\(s_1 = -2\\) e \\(s_2 = -5\\)",
+                    "\\(s_1 = -4\\) e \\(s_2 = -5\\)",
+                    "\\(s_1 = -3 + j4\\) e \\(s_2 = -3 - j4\\)",
+                    "\\(s_1 = -2 + j5\\) e \\(s_2 = -2 - j5\\)",
+                    "\\(s_1 = j4\\) e \\(s_2 = -j4\\)"
+                ],
+                answer: 2
+            },
+            {
+                number: 69,
+                text: "A Função de Transferência mostrada a seguir representa o modelo de um sistema contínuo, linear, de \\(2^a\\) ordem, alimentado por uma entrada U(s) e tendo, como saída, o sinal Y(s), ambos no domínio de Laplace.<br><br>\\[ \\frac{Y(s)}{U(s)} = \\frac{200}{2s^2 + 8s + 200} \\]<br><br>Ao ser aplicado um Impulso Unitário na entrada desse sistema, o sinal de saída oscilará na forma de uma senoide exponencialmente amortecida. Dessa forma, a constante conhecida como Razão de Amortecimento desse sistema vale",
+                options: [
+                    "0,1",
+                    "0,2",
+                    "0,4",
+                    "0,5",
+                    "0,8"
+                ],
+                answer: 1
+            },
+            {
+                number: 70,
+                text: "A Função de Transferência mostrada a seguir representa um modelo de sistema discreto, linear e causal, com sinais de entrada X(z) e de saída Y(z).<br><br>\\[ G(z) = \\frac{Y(z)}{X(z)} = \\frac{3z^2 - 3z}{z^2 - 6z + 5} \\]<br><br>No domínio do tempo discreto, quando esse sistema for submetido a uma entrada do tipo IMPULSO UNITÁRIO, \\(x(n) = \\delta(n)\\), quais serão as três primeiras amostras da resposta y(n) desse sistema, ou seja, quanto valem as seguintes amostras discretas: y(0), y(1), y(2)?",
+                options: [
+                    "2, 5 e 8",
+                    "5, 15 e 36",
+                    "5, 20 e 45",
+                    "3, 25 e 87",
+                    "3, 15 e 75"
+                ],
+                answer: 4
+            }
+        ];
+
+        const letters = ["A", "B", "C", "D", "E"];
+        const container = document.getElementById('questions-container');
+
+        // Renderizar questões
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = "bg-white p-6 rounded-lg shadow-md";
+            
+            let html = `<h3 class="text-lg font-bold mb-4">Questão ${q.number}</h3>`;
+            html += `<p class="mb-4 text-gray-700 leading-relaxed">${q.text}</p>`;
+            html += `<div class="space-y-2">`;
+            
+            q.options.forEach((opt, optIndex) => {
+                html += `
+                    <label id="label-q${index}-opt${optIndex}" class="flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                        <input type="radio" name="q${index}" value="${optIndex}" class="mt-1 mr-3 w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500">
+                        <span class="font-semibold mr-2">${letters[optIndex]})</span>
+                        <span class="text-gray-700">${opt}</span>
+                    </label>
+                `;
+            });
+            
+            html += `</div>`;
+            questionDiv.innerHTML = html;
+            container.appendChild(questionDiv);
+        });
+
+        // Corrigir formulário
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            let score = 0;
+            
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                const correctLabel = document.getElementById(`label-q${index}-opt${q.answer}`);
+                
+                // Reset styles
+                for(let i = 0; i < 5; i++) {
+                    document.getElementById(`label-q${index}-opt${i}`).classList.remove('correct-answer', 'wrong-answer', 'missed-correct');
+                }
+                
+                if (selected) {
+                    const selectedVal = parseInt(selected.value);
+                    const selectedLabel = document.getElementById(`label-q${index}-opt${selectedVal}`);
+                    
+                    if (selectedVal === q.answer) {
+                        score++;
+                        selectedLabel.classList.add('correct-answer');
+                    } else {
+                        selectedLabel.classList.add('wrong-answer');
+                        correctLabel.classList.add('missed-correct');
+                    }
+                } else {
+                    correctLabel.classList.add('missed-correct');
+                }
+                
+                // Desativar inputs
+                document.querySelectorAll(`input[name="q${index}"]`).forEach(input => input.disabled = true);
+            });
+            
+            document.getElementById('score').innerText = score;
+            document.getElementById('result-display').classList.remove('hidden');
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').classList.add('opacity-50', 'cursor-not-allowed');
+            document.getElementById('submit-btn').innerText = "Simulado Corrigido";
+            
+            // Força a renderização do MathJax caso alguma nova fórmula tenha aparecido
+            MathJax.typesetPromise();
+            
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

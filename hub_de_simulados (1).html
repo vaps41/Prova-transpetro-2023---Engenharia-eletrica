@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub de Simulados & Provas | Transpetro</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0b0f19; color: #f1f5f9; }
+        .card-hover { transition: all 0.2s ease-in-out; }
+        .card-hover:hover { transform: translateY(-3px); border-color: rgba(59, 130, 246, 0.5); box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0f19; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
+
+    <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-blue-600/20 border border-blue-500/30 rounded-xl text-blue-400">
+                    <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-white tracking-tight">Simulados & Provas</h1>
+                    <p class="text-xs text-slate-400">Transpetro 2023 - Engenharia Elétrica</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button onclick="fetchFiles()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium rounded-lg border border-slate-700 flex items-center gap-1.5 transition-colors">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Atualizar Lista
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl w-full mx-auto px-4 py-8 flex-grow">
+        
+        <!-- Barra de busca rápida -->
+        <div class="mb-6">
+            <div class="relative">
+                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    oninput="filterFiles()"
+                    placeholder="Pesquisar simulado ou arquivo..." 
+                    class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors shadow-inner"
+                >
+            </div>
+        </div>
+
+        <!-- Status de Carregamento -->
+        <div id="loading" class="py-16 text-center text-slate-400 space-y-3">
+            <i data-lucide="loader-2" class="w-8 h-8 animate-spin mx-auto text-blue-500"></i>
+            <p class="text-sm">Buscando simulados diretamente do repositório...</p>
+        </div>
+
+        <!-- Mensagem de Erro / Aviso -->
+        <div id="errorBox" class="hidden bg-red-500/10 border border-red-500/30 text-red-300 p-4 rounded-xl text-sm mb-6 flex items-center gap-3">
+            <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
+            <span id="errorText">Não foi possível carregar os arquivos automaticamente. Usando link direto padrão.</span>
+        </div>
+
+        <!-- Lista de Simulados / Arquivos -->
+        <div id="fileList" class="space-y-3">
+            <!-- Os arquivos serão injetados aqui via JavaScript -->
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-800/80 py-6 text-center text-xs text-slate-500">
+        <p>Pratique com foco na aprovação. Seus simulados em um só clique.</p>
+    </footer>
+
+    <script>
+        const repoOwner = "vaps41";
+        const repoName = "prova-transpetro-2023---engenharia-eletrica";
+        const branchHash = "7c2afe702b9a59600d8236b12093517c7a4535b9";
+
+        // Lista padrão pré-carregada com os novos simulados da pasta Simulados/
+        const defaultSimulados = [
+            { path: "Simulados/simulado_transpetro_2008_engenharia_el_trica.html", title: "Transpetro 2008 - Engenharia Elétrica", year: "2008" },
+            { path: "Simulados/simulado_engenharia_el_trica_2011.html", title: "Simulado Engenharia Elétrica 2011", year: "2011" },
+            { path: "Simulados/simulado_engenharia_el_trica_2012.html", title: "Simulado Engenharia Elétrica 2012", year: "2012" },
+            { path: "Simulados/simulado_engenharia_el_trica_2018.html", title: "Simulado Engenharia Elétrica 2018", year: "2018" },
+            { path: "Simulados/aplicativo_de_engenharia_el_trica.html", title: "Aplicativo Geral de Engenharia Elétrica", year: "Geral" }
+        ];
+
+        let allFiles = [];
+
+        async function fetchFiles() {
+            const loadingEl = document.getElementById('loading');
+            const fileListEl = document.getElementById('fileList');
+            const errorBox = document.getElementById('errorBox');
+            
+            loadingEl.style.display = 'block';
+            fileListEl.innerHTML = '';
+            errorBox.classList.add('hidden');
+
+            try {
+                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/git/trees/${branchHash}?recursive=1`);
+                
+                if (!response.ok) throw new Error("Erro ao acessar a API do GitHub.");
+                
+                const data = await response.json();
+                // Filtra blobs HTML excluindo o próprio index.html
+                allFiles = data.tree.filter(item => 
+                    item.type === 'blob' && 
+                    item.path.toLowerCase().endsWith('.html') && 
+                    !item.path.toLowerCase().endsWith('index.html')
+                );
+                
+                loadingEl.style.display = 'none';
+                renderFiles(allFiles.length > 0 ? allFiles : defaultSimulados);
+
+            } catch (err) {
+                loadingEl.style.display = 'none';
+                // Usando lista padrão com links locais e remotos
+                allFiles = defaultSimulados;
+                renderFiles(allFiles);
+            }
+        }
+
+        function formatSimuladoInfo(filePath) {
+            const fileName = filePath.split('/').pop().replace(/\.html$/i, '');
+            const yearMatch = fileName.match(/\b(19\d\d|20\d\d)\b/);
+            const year = yearMatch ? yearMatch[0] : 'Simulado';
+            
+            let label = fileName
+                .replace(/_/g, ' ')
+                .replace(/simulado/gi, '')
+                .replace(/transpetro/gi, 'Transpetro')
+                .replace(/engenharia el trica/gi, 'Engenharia Elétrica')
+                .trim();
+                
+            if (!label) label = fileName;
+            return {
+                cleanTitle: label.charAt(0).toUpperCase() + label.slice(1),
+                year: year
+            };
+        }
+
+        function renderFiles(files) {
+            const fileListEl = document.getElementById('fileList');
+            fileListEl.innerHTML = '';
+
+            if (files.length === 0) {
+                fileListEl.innerHTML = `
+                    <div class="text-center py-12 text-slate-500 text-sm">
+                        Nenhum simulado encontrado nesta pasta.
+                    </div>
+                `;
+                return;
+            }
+
+            files.forEach(file => {
+                const isHtml = file.path.toLowerCase().endsWith('.html');
+                const info = formatSimuladoInfo(file.path);
+                
+                // Link relativo direto (funciona local e no GitHub Pages)
+                const relativeUrl = `./${file.path}`;
+                
+                // Link do GitHub Preview caso esteja visualizando remotamente sem servidor
+                const githubRawUrl = `https://github.com/${repoOwner}/${repoName}/blob/${branchHash}/${file.path}`;
+                const previewUrl = `https://htmlpreview.github.io/?${githubRawUrl}`;
+
+                const item = document.createElement('div');
+                item.className = "card-hover bg-slate-900 border border-slate-800/80 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4";
+                
+                item.innerHTML = `
+                    <div class="flex items-center gap-3.5 overflow-hidden">
+                        <div class="p-3 rounded-xl shrink-0 bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            <i data-lucide="award" class="w-5 h-5"></i>
+                        </div>
+                        <div class="truncate">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                                    ${info.year}
+                                </span>
+                                <h2 class="text-sm font-semibold text-slate-200 truncate" title="${file.path}">
+                                    ${info.cleanTitle}
+                                </h2>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1 flex items-center gap-1 font-mono">
+                                <i data-lucide="folder" class="w-3 h-3"></i> ${file.path}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                        <a 
+                            href="${relativeUrl}" 
+                            class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg transition-colors flex items-center gap-1.5 shadow-md shadow-blue-600/20"
+                            title="Abrir diretamente na mesma pasta ou no GitHub Pages"
+                        >
+                            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                            <span>Iniciar Simulado</span>
+                        </a>
+                        <a 
+                            href="${previewUrl}" 
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg border border-slate-700 text-xs transition-colors"
+                            title="Abrir via visualizador online do GitHub"
+                        >
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                `;
+
+                fileListEl.appendChild(item);
+            });
+
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+        }
+
+        function filterFiles() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allFiles.filter(f => f.path.toLowerCase().includes(query));
+            renderFiles(filtered);
+        }
+
+        window.onload = () => {
+            fetchFiles();
+        };
+    </script>
+</body>
+</html>

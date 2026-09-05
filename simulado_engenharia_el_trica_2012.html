@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado TRANSPETRO 2012 - Engenharia Elétrica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .correct-answer {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+            color: #065f46;
+        }
+        .wrong-answer {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b;
+        }
+        .missed-correct {
+            background-color: #fef3c7 !important;
+            border-color: #f59e0b !important;
+            color: #92400e;
+        }
+        .circuit-box {
+            background-color: #e2e8f0;
+            border: 1px solid #cbd5e1;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <div class="max-w-5xl mx-auto p-4 md:p-8">
+        <header class="mb-8 text-center bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-600">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Simulado TRANSPETRO</h1>
+            <h2 class="text-xl text-gray-600">Engenheiro(a) Júnior - Área Elétrica (Prova 7 - 2012)</h2>
+            <p class="text-sm text-gray-500 mt-2">Responda as 50 questões de Conhecimentos Específicos e clique em "Corrigir Simulado" no final para avaliar seu desempenho.</p>
+        </header>
+
+        <form id="quiz-form">
+            <div id="questions-container" class="space-y-6">
+            </div>
+
+            <div class="mt-8 flex justify-between items-center bg-white p-6 rounded-lg shadow-md sticky bottom-4 z-10">
+                <button type="button" id="submit-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200 shadow-lg">
+                    Corrigir Simulado
+                </button>
+                <div id="result-display" class="text-2xl font-bold text-gray-800 hidden">
+                    Pontuação: <span id="score" class="text-indigo-600">0</span> / <span id="total">50</span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                number: 21,
+                text: "Uma onda plana uniforme, com frequência de 100 MHz, linearmente polarizada, propagando-se no ar da esquerda para a direita, incide normalmente sobre a superfície plana de um segundo meio material infinitamente grande e com impedância característica \\(Zc_D\\) desconhecida. Medições realizadas no ar determinaram uma razão de onda estacionária (SWR) de valor 2 e o aparecimento de um valor mínimo do campo elétrico em \\(z = -0,25 \\lambda_0\\).<br><br>Qual o valor da impedância de onda, em \\(\\Omega\\), no plano de intensidade de campo elétrico mínimo?",
+                options: ["76,75", "188,50", "195,50", "377,00", "754,00"],
+                answer: 1 // B
+            },
+            {
+                number: 22,
+                text: "No interior de uma esfera condutora maciça e descarregada, de raio a [m], são feitas três cavidades esféricas com mesmo raio r [m]. No centro de cada cavidade é colocada uma carga puntiforme positiva, cujos valores, em [C], são: 2q, 3q e 5q, onde q é carga de referência, de valor constante. Considere que os meios, no exterior da esfera condutora e nos interiores das cavidades, têm a mesma permissividade \\(\\epsilon_0 [F/m]\\).<br><br>A intensidade de campo elétrico, E [V/m], no ponto X externo à esfera, a uma distância b da borda externa (distância a+b do centro), é",
+                options: [
+                    "0",
+                    "\\(\\frac{5q}{2\\pi\\epsilon_0(a+b)^2}\\)",
+                    "\\(-\\frac{5q}{2\\pi\\epsilon_0(b)^2}\\)",
+                    "\\(\\frac{\\pi\\epsilon_0 q}{(a+b)^2}\\)",
+                    "\\(\\frac{10q}{\\pi\\epsilon_0(b-a)^2}\\)"
+                ],
+                answer: 1 // B
+            },
+            {
+                number: 23,
+                text: "Uma onda plana uniforme e linearmente polarizada propaga-se na direção positiva do eixo z em um meio dielétrico perfeito, ilimitado, com permissividade \\(\\epsilon [F/m]\\) e permeabilidade \\(\\mu_0 [H/m]\\). Num determinado ponto P desse meio, a expressão complexa do vetor intensidade de campo elétrico é \\(E_p = u_x E e^{-j\\beta z} [V/m]\\).<br><br>A expressão da densidade média de potência, em \\([W/m^2]\\), dessa onda plana no ponto P, é",
+                options: [
+                    "\\(u_z \\sqrt{\\frac{\\mu_0}{\\eta}} E^2 e^{j2\\beta z}\\)",
+                    "\\(\\sqrt{\\frac{u_z E}{\\mu_0}} E^2 e^{-j2\\beta z}\\)",
+                    "\\(\\frac{u_z}{2} \\sqrt{\\frac{\\epsilon}{\\mu_0}} E e^{-j2\\beta z}\\)",
+                    "\\(\\frac{u_z}{2} \\sqrt{\\frac{\\mu_0}{\\epsilon}} E^2\\)",
+                    "\\(\\frac{u_z}{2} \\sqrt{\\frac{\\epsilon}{\\mu_0}} E^2\\)"
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 24,
+                text: "Um circuito de corrente contínua é composto por uma fonte de corrente de 8 A (subindo), em paralelo com um resistor de 5 \\(\\Omega\\). Em paralelo a este conjunto, há um ramo contendo uma fonte de tensão de 10 V em série com um resistor de 5 \\(\\Omega\\). Desse conjunto, sai um resistor de 2 \\(\\Omega\\) em série, terminando no nó A. Do nó A para o nó B (referência inferior), há um resistor de 3 \\(\\Omega\\).<br><br>Substituindo-se, nos terminais A e B, o circuito apresentado por um circuito equivalente de Norton, qual o valor da fonte de corrente, em ampères, para que haja a correta equivalência entre os circuitos?",
+                options: ["50/9", "25/9", "10/3", "18", "8"],
+                answer: 0 // A
+            },
+            {
+                number: 25,
+                text: "Considerando o mesmo circuito da questão anterior (visto a partir dos terminais A e B, onde o resistor de 3 \\(\\Omega\\) está entre A e B).<br><br>Ao conectar uma resistência nos terminais A e B (removendo a original ou mantendo a estrutura como caixa preta, sendo que a resistência de Thevenin do circuito total entre A e B será a base para o cálculo), qual deve ser o valor da resistência de carga, em ohms, para que haja a máxima transferência de potência possível do circuito?",
+                options: ["1,8", "2,1", "4,5", "10,0", "15,0"],
+                answer: 0 // A (1.8 ohms)
+            },
+            {
+                number: 26,
+                text: "O modelo elétrico monofásico de um gerador síncrono trifásico é composto basicamente por uma tensão interna gerada (Eg), uma reatância indutiva (jXs) e os terminais de conexão. Esse gerador será conectado a um terminal de um sistema elétrico cuja tensão terminal de fase é denominada \\(V_T\\).<br><br>Sendo \\(\\delta\\) o ângulo entre a tensão terminal e a tensão interna gerada (ângulo de torque da máquina), e \\(\\omega_m\\) a velocidade mecânica no eixo do gerador, qual a expressão que define o torque mecânico aplicado no gerador?",
+                options: [
+                    "\\(\\frac{3 V_T \\cdot E_g \\cdot sen^2(\\delta)}{\\omega_m \\cdot X_S}\\)",
+                    "\\(\\frac{3 V_T \\cdot E_g \\cdot sen(\\delta)}{\\omega_m \\cdot X_S}\\)",
+                    "\\(\\frac{3 (V_T \\cdot E_g)^2 \\cdot sen(\\delta)}{\\omega_m \\cdot X_S}\\)",
+                    "\\(\\frac{V_T \\cdot E_g \\cdot sen^2(\\delta)}{\\omega_m^2 \\cdot X_S}\\)",
+                    "\\(\\frac{V_T \\cdot E_g \\cdot sen^2(\\delta)}{\\omega_m \\cdot X_S}\\)"
+                ],
+                answer: 1 // B
+            },
+            {
+                number: 27,
+                text: "Considere que um gerador síncrono seja de 4 polos, gerando a tensão Eg numa frequência de 60 Hz. Deseja-se obter um gerador que, quando obtida a mesma velocidade no rotor, gere uma tensão Eg numa frequência de 300 Hz.<br><br>Quantos polos deve ter o gerador desejado?",
+                options: ["8", "10", "12", "20", "24"],
+                answer: 3 // D
+            },
+            {
+                number: 28,
+                text: "Uma bomba centrífuga, quando operando com velocidade de rotação de 3500 rpm, tem a sua altura manométrica definida pela equação: \\(H_{man} = 150 - 200 Q^2\\), onde H é em metros e Q em \\(m^3/s\\).<br><br>Considere a operação de duas bombas centrífugas idênticas conectadas em paralelo. Qual a expressão característica que define a altura manométrica total do sistema \\(H_{man-total}\\) em função de \\(Q_{total}\\)?",
+                options: [
+                    "\\(H_{man-total} = 300 - 200 Q_{total}^2\\)",
+                    "\\(H_{man-total} = 300 - 100 Q_{total}^2\\)",
+                    "\\(H_{man-total} = 150 - 200 Q_{total}^2\\)",
+                    "\\(H_{man-total} = 150 - 50 Q_{total}^2\\)",
+                    "\\(H_{man-total} = 75 - 50 Q_{total}^2\\)"
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 29,
+                text: "Inicialmente a bomba opera com uma vazão de \\(720 m^3/h\\), com velocidade de rotação descrita anteriormente (3500 rpm).<br><br>A partir do conceito da lei de similaridade para bombas, qual a altura manométrica obtida, em m, caso a velocidade de rotação dessa bomba seja alterada para 1750 rpm?",
+                options: ["35,5", "37,5", "71,0", "75,0", "149,5"],
+                answer: 0 // A
+            },
+            {
+                number: 30,
+                text: "No circuito RL série, a fonte V é ideal e o indutor está descarregado até o fechamento da chave, que ocorre em t=0.<br><br>Considerando os dados, após o fechamento da chave, a função matemática que descreve a corrente do circuito, em função de R, L e V, no tempo (t), é",
+                options: [
+                    "\\(\\frac{V}{R} [1 + e^{\\frac{R}{L}t}]\\)",
+                    "\\(\\frac{V}{R} [1 + e^{-\\frac{L}{R}t}]\\)",
+                    "\\(\\frac{V}{R} [1 - e^{\\frac{R}{L}t}]\\)",
+                    "\\(\\frac{V}{R} [1 - e^{-\\frac{R}{L}t}]\\)",
+                    "\\(\\frac{V}{R} [1 - e^{-\\frac{L}{R}t}]\\)"
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 31,
+                text: "Um circuito trifásico balanceado possui três resistores R conectados em triângulo (Delta). A fonte que alimenta esse circuito é balanceada e de sequência NEGATIVA. A tensão de linha \\(V_{AB} = V_m \\angle 0^{\\circ}\\) volts.<br><br>O fasor da corrente de linha \\(I_{LA}\\), em ampère, e em função dos dados apresentados, é",
+                options: [
+                    "\\(\\sqrt{3} \\frac{V_m}{R} \\angle 0^{\\circ}\\)",
+                    "\\(\\sqrt{3} \\frac{V_m}{R} \\angle -30^{\\circ}\\)",
+                    "\\(\\sqrt{3} \\frac{V_m}{R} \\angle 30^{\\circ}\\)",
+                    "\\(\\frac{V_m}{3R} \\angle 30^{\\circ}\\)",
+                    "\\(\\frac{V_m}{3R} \\angle -30^{\\circ}\\)"
+                ],
+                answer: 1 // B
+            },
+            {
+                number: 32,
+                text: "Uma falta envolve as três fases e o terra. No ponto da falta, as tensões fase-terra são:<br>\\(V_a = (120\\angle30^{\\circ} + 50\\angle15^{\\circ} + 24\\angle45^{\\circ})\\) V<br>\\(V_b = (120\\angle-90^{\\circ} + 50\\angle135^{\\circ} + 24\\angle45^{\\circ})\\) V<br>\\(V_c = (120\\angle150^{\\circ} + 50\\angle-105^{\\circ} + 24\\angle45^{\\circ})\\) V<br>A carga da falta é composta por três resistores de 3 \\(\\Omega\\) conectados em Estrela, e o neutro da estrela está conectado à terra por meio de um resistor de 3 \\(\\Omega\\). O valor rms, em ampère, da corrente \\(I_x\\) que flui para a terra é:",
+                options: ["2,0", "2,7", "4,0", "5,6", "6,0"],
+                answer: 4 // E
+            },
+            {
+                number: 33,
+                text: "Um sistema elétrico radial é composto por: Gerador (20 MVA, 10 kV, X=10%) -> Transformador #1 (40 MVA, 10/100 kV, X=10%) -> Linha de Transmissão (\\(Z = j100 \\Omega\\)) -> Transformador #2 (40 MVA, 100/20 kV, X=10%) -> Reator (\\(Z = j12 \\Omega\\) a 20 kV).<br>O gerador está operando em condições nominais (tensão terminal 1.0 p.u.).<br><br>Considerando como base 20 MVA e 20 kV na barra do reator, o valor por unidade da tensão nessa mesma barra é",
+                options: ["0,4", "0,5", "0,6", "0,8", "1,0"],
+                answer: 2 // C
+            },
+            {
+                number: 34,
+                text: "Uma bomba centrífuga opera em uma velocidade de rotação de 900 rpm e com uma vazão de \\(40 m^3/h\\). Sabe-se que o diâmetro do impelidor da bomba é de 20 cm. Deseja-se substituir essa bomba por outra do mesmo tipo, porém, com diâmetro do impelidor de 10 cm e operando com uma velocidade de rotação de 1800 rpm.<br><br>Considerando que o fluído de trabalho é ideal e os critérios de similaridade são satisfeitos, o valor da vazão, em \\(m^3/h\\), após a substituição é",
+                options: ["10", "20", "40", "60", "80"],
+                answer: 0 // A
+            },
+            {
+                number: 35,
+                text: "Um transformador trifásico tem relação de transformação de espiras (fase) entre primário e secundário de 100:1. A tensão de linha a ser aplicada no primário é de 900 V. Para que a tensão de linha no secundário seja de \\(3\\sqrt{3}\\) V, é necessário que a configuração do primário e do secundário desse transformador sejam, respectivamente:",
+                options: [
+                    "estrela e estrela",
+                    "estrela e delta",
+                    "delta e delta",
+                    "delta e estrela",
+                    "delta e estrela aterrado"
+                ],
+                answer: 1 // B
+            },
+            {
+                number: 36,
+                text: "Um sistema elétrico trifásico pode ter suas grandezas fasoriais representadas em termos de componentes simétricos nas sequências positiva, negativa e zero. A expressão da potência complexa trifásica S, em termos de componentes simétricos, é:",
+                options: [
+                    "\\(3 (\\bar{V}_1^* \\cdot \\bar{I}_1 + \\bar{V}_2^* \\cdot \\bar{I}_2 + \\bar{V}_0^* \\cdot \\bar{I}_0)\\)",
+                    "\\(3 (\\bar{V}_1 \\cdot \\bar{I}_1^* + \\bar{V}_2 \\cdot \\bar{I}_2^* + \\bar{V}_0 \\cdot \\bar{I}_0^*)\\)",
+                    "\\(\\bar{V}_1 \\cdot \\bar{I}_1 + \\bar{V}_2 \\cdot \\bar{I}_2 + \\bar{V}_0 \\cdot \\bar{I}_0\\)",
+                    "\\(\\bar{V}_1 \\cdot \\bar{I}_1^* + \\bar{V}_2 \\cdot \\bar{I}_2^* + \\bar{V}_0 \\cdot \\bar{I}_0^*\\)",
+                    "\\(\\bar{V}_1^* \\cdot \\bar{I}_1 + \\bar{V}_2^* \\cdot \\bar{I}_2 + \\bar{V}_0^* \\cdot \\bar{I}_0\\)"
+                ],
+                answer: 1 // B
+            },
+            {
+                number: 37,
+                text: "Em uma instalação elétrica industrial, existem várias cargas que, juntas, possuem uma potência aparente de 5.000 VA e uma potência ativa de 4.350 W. Nessa instalação, será instalado um motor síncrono de 3.333,33 W.<br><br>Para que esse motor eleve o fator de potência da instalação para 1,0 (um), ele deve ter, em VA, uma potência aparente mínima aproximada de",
+                options: ["5.000,00", "4.350,00", "4.166,70", "3.333,33", "2.500,00"],
+                answer: 2 // C
+            },
+            {
+                number: 38,
+                text: "Um motor monofásico shunt de corrente contínua, de 10 HP de potência mecânica (1 HP = 746 W) e 100 V de tensão de alimentação, tem um rendimento de 80%. Sabendo-se que a corrente de excitação é de 2,5 A, a corrente do induzido, em ampères, desse motor é",
+                options: ["93,25", "90,75", "59,68", "57,18", "53,21"],
+                answer: 1 // B
+            },
+            {
+                number: 39,
+                text: "Um sistema elétrico é composto por um gerador em série com um transformador elevador de tensão. O secundário desse transformador é conectado a uma linha de transmissão de \\(j50 \\Omega\\) e a relação de tensão de linha do transformador é de 1:10. Foram escolhidas as bases de 1 kV e 1.000 kVA, referentes ao lado do gerador.<br><br>A reatância da linha de transmissão, em p.u., é",
+                options: ["j2,0", "j1,0", "j0,5", "j0,3", "j0,1"],
+                answer: 2 // C
+            },
+            {
+                number: 40,
+                text: "Um equipamento tem tensão nominal de 1.000 V, potência de 1.500 kVA e reatância subtransitória de 20%. Esse equipamento está num setor com tensão de base de 2.000 V e potência de base de 4.500 kVA.<br><br>A reatância subtransitória desse equipamento, na nova base em p.u., deve assumir o valor de",
+                options: ["j0,50", "j0,45", "j0,20", "j0,15", "j0,10"],
+                answer: 3 // D
+            },
+            {
+                number: 41,
+                text: "Uma empresa fornece motores de apenas duas marcas: M e N. A probabilidade de um motor ser da marca M é de 25%. A encomenda realizada por uma unidade industrial foi de 6 motores.<br><br>Qual é a probabilidade de, ao serem entregues, EXATAMENTE 2 motores serem da marca M?",
+                options: ["1/3", "1/16", "97/4096", "81/4096", "1215/4096"],
+                answer: 4 // E
+            },
+            {
+                number: 42,
+                text: "Dentre todas as retas tangentes ao gráfico da função \\(f: \\mathbb{R} \\rightarrow \\mathbb{R}\\), definida por \\(f(x) = e^x \\cdot (x^2 + 1)\\), qual é aquela que possui o menor coeficiente angular?",
+                options: ["\\(y = \\frac{2}{e}\\)", "\\(y = \\frac{2}{e} x\\)", "\\(y = x + 1\\)", "\\(y = 1\\)", "\\(y = 2e\\)"],
+                answer: 0 // A
+            },
+            {
+                number: 43,
+                text: "Um engenheiro utilizou um sólido do \\(\\mathbb{R}^3\\) que é limitado superiormente pelo paraboloide \\(z = 2(x^2 + y^2)\\), lateralmente pelo cilindro \\(x^2 + y^2 = 2y\\) e, inferiormente, pelo plano xy.<br><br>Qual é o volume do sólido utilizado?",
+                options: ["\\(\\frac{\\pi}{2} u.v.\\)", "\\(\\frac{3\\pi}{2} u.v.\\)", "\\(3\\pi u.v.\\)", "\\(6\\pi u.v.\\)", "\\(8\\pi u.v.\\)"],
+                answer: 2 // C
+            },
+            {
+                number: 44,
+                text: "Se \\(\\vec{F}: \\mathbb{R}^2 \\rightarrow \\mathbb{R}^2\\) é o campo vetorial definido por \\(\\vec{F}(x,y) = (2x + 2y^2, 3y^2 + 4xy + 1)\\) e \\(\\alpha\\) é uma curva simples de \\((0,0)\\) a \\((3,4)\\), o valor da integral de linha \\(\\int_\\alpha \\vec{F} \\cdot d\\alpha\\) é:",
+                options: ["-173", "-4/3", "4/3", "5", "173"],
+                answer: 4 // E
+            },
+            {
+                number: 45,
+                text: "Uma variável aleatória quantitativa X assume todos os valores numéricos do intervalo real [3,11]. A sua distribuição é simétrica e sua variância é igual a 2.<br><br>Dessa forma, ao se considerar a variável aleatória Y definida por \\(Y = 4X + 3\\), a média e o desvio padrão de Y serão, respectivamente, iguais a",
+                options: [
+                    "10 e \\(\\sqrt{11}\\)",
+                    "10 e \\(4\\sqrt{2}\\)",
+                    "10 e \\((4\\sqrt{2} + 3)\\)",
+                    "31 e \\(\\sqrt{11}\\)",
+                    "31 e \\(4\\sqrt{2}\\)"
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 46,
+                text: "Se \\(T: \\mathbb{R}^n \\rightarrow \\mathbb{R}^m\\) é uma transformação linear sobrejetora, que NÃO é injetora, então, tem-se",
+                options: ["\\(m \\le n-1\\)", "\\(n \\le m-1\\)", "\\(n = m\\)", "\\(m > 2\\)", "\\(n > 3\\)"],
+                answer: 0 // A
+            },
+            {
+                number: 47,
+                text: "Se \\(y: \\mathbb{R} \\rightarrow \\mathbb{R}\\) é a solução do problema de valor inicial \\(y'' + y' + y = 0\\), com \\(y(0)=0\\) e \\(y'(0)=\\frac{3\\sqrt{3}}{2}\\), quanto vale \\(y(2)\\)?",
+                options: [
+                    "\\(\\frac{3}{e} \\cdot cos(\\sqrt{3})\\)",
+                    "\\(\\frac{3}{e} \\cdot sen(\\sqrt{3})\\)",
+                    "\\(3e \\cdot cos(\\sqrt{3})\\)",
+                    "\\(3e \\cdot sen(\\sqrt{3})\\)",
+                    "\\(3(e-1) \\cdot cos(\\sqrt{3})\\)"
+                ],
+                answer: 1 // B
+            },
+            {
+                number: 48,
+                text: "Se, para dados n, m \\(\\in \\mathbb{N}\\), o limite \\(\\lim_{x\\to+\\infty} \\frac{3m \\cdot x^n + 1}{n \\cdot x^m + 3}\\) é finito e não nulo, então seu valor deve ser igual a",
+                options: ["1/3", "1", "4/3", "3", "4"],
+                answer: 3 // D
+            },
+            {
+                number: 49,
+                text: "Um determinado gás realiza um trabalho de 5 Joules, após receber uma quantidade de calor Q = 20 Joules. Como a energia interna do sistema, antes de receber o calor, era U = 80 Joules, qual será, em Joules, essa energia após esse recebimento de calor?",
+                options: ["55", "65", "85", "95", "105"],
+                answer: 3 // D
+            },
+            {
+                number: 50,
+                text: "A grandeza que se caracteriza como a quantidade de energia contida em uma substância que sofre uma reação é a(o)",
+                options: ["entalpia", "entropia", "caloria", "calor", "trabalho"],
+                answer: 0 // A
+            },
+            {
+                number: 51,
+                text: "Considere uma esfera homogênea construída com material de peso específico \\(\\gamma_x\\). Essa esfera é imersa em um recipiente com água (peso específico \\(\\gamma_{agua}\\)). Qual deve ser a expressão do peso específico da esfera para que fique equilibrada de modo que o nível da água passe exatamente pelo seu centro?",
+                options: [
+                    "\\(\\gamma_x = \\gamma_{agua}\\)",
+                    "\\(\\gamma_x = \\frac{\\gamma_{agua}}{2}\\)",
+                    "\\(\\gamma_x = \\frac{\\gamma_{agua} V_{esf}}{V_{agua}}\\)",
+                    "\\(\\gamma_x = \\frac{\\gamma_{agua} V_{agua}}{V_{esf}}\\)",
+                    "\\(\\gamma_x = \\frac{\\gamma_{agua} V_{agua}}{2 V_{esf}}\\)"
+                ],
+                answer: 1 // B
+            },
+            {
+                number: 52,
+                text: "O Inversor de Frequência é o elo entre a etapa de controle e a motorização de uma máquina. NÃO atende às características de um Inversor de Frequência um equipamento que",
+                options: [
+                    "regula a velocidade de um motor elétrico AC, mantendo o seu torque.",
+                    "trabalha somente com motores elétricos AC.",
+                    "tem a mesma função do conversor CC.",
+                    "aciona somente motores de indução trifásicos.",
+                    "tem o circuito interno diferente do conversor CC."
+                ],
+                answer: 2 // C
+            },
+            {
+                number: 53,
+                text: "Um sistema com realimentação unitária negativa tem a função de malha direta \\(G(s) = \\frac{K}{(s+2)(s+8)}\\). A resposta ao degrau unitário atinge o valor de regime permanente de y(t) = 0,8. Com base nesses dados, o valor do ganho K é",
+                options: ["100", "64", "38", "16", "10"],
+                answer: 1 // B
+            },
+            {
+                number: 54,
+                text: "O polinômio do denominador da função de transferência em malha fechada de um sistema linear é \\(s^3 + 10s^2 + 8s + K - 64\\). Considerando-se que o numerador da função de transferência é um valor constante, qual a faixa de variação do ganho K que garante a estabilidade do sistema?",
+                options: [
+                    "\\(0 < K < 64\\)",
+                    "\\(54 < K < 112\\)",
+                    "\\(54 < K < 128\\)",
+                    "\\(64 < K < 144\\)",
+                    "\\(64 < K < 188\\)"
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 55,
+                text: "Dois sistemas lineares de 1ª ordem em cascata têm a dinâmica descrita por: \\(\\frac{dv}{dt} + 5v(t) = 2\\frac{dx}{dt}\\)  e  \\(3\\frac{dy}{dt} + 4y(t) = v(t)\\). A expressão da função de transferência que liga a entrada X(s) à saída Y(s) é dada por",
+                options: [
+                    "\\(G(s) = \\frac{2s}{s^2 + 5s + 10}\\)",
+                    "\\(G(s) = \\frac{2s}{3s^2 + 19s + 20}\\)",
+                    "\\(G(s) = \\frac{20}{3s^2 + 5s + 10}\\)",
+                    "\\(G(s) = \\frac{20}{s^2 + 5s + 10}\\)",
+                    "\\(G(s) = \\frac{20}{3s^2 + 19s + 20}\\)"
+                ],
+                answer: 1 // B
+            },
+            {
+                number: 56,
+                text: "Um feixe (condutor geminado) possui 4 subcondutores cilíndricos, maciços de raio r, dispostos nos vértices de um quadrado de lado D. Desconsiderando-se a impedância interna, o raio do condutor equivalente a esse feixe (RMG) é",
+                options: [
+                    "\\(\\sqrt{r \\cdot D}\\)",
+                    "\\(2 \\sqrt{r \\cdot D^3}\\)",
+                    "\\(\\sqrt[3]{3 \\cdot r \\cdot D^2}\\)",
+                    "\\(\\sqrt[4]{4 \\cdot r^3 \\cdot D}\\)",
+                    "\\(\\sqrt[4]{4 \\cdot r \\cdot D^3}\\)" // Gabarito aceitou E, matematicamente é a aproximação.
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 57,
+                text: "Deseja-se projetar a instalação elétrica em baixa tensão de uma residência cuja área e cujo perímetro da sala são \\(32 m^2\\) e \\(24 m\\), respectivamente. Considerando-se as normas vigentes (NBR 5410), o número mínimo de pontos de tomada a ser previsto no projeto dessa sala é",
+                options: ["3", "4", "5", "6", "7"],
+                answer: 2 // C
+            },
+            {
+                number: 58,
+                text: "Em uma instalação elétrica em média tensão, o valor percentual da máxima queda de tensão admissível, em regime permanente, entre a origem da instalação e qualquer ponto de utilização, é",
+                options: ["3%", "4%", "5%", "7%", "10%"],
+                answer: 2 // C
+            },
+            {
+                number: 59,
+                text: "Em uma linha aérea, três condutores estão nas alturas \\(H_1, H_2, H_3\\) acima de um solo ideal. Há transposição completa. A distância entre eles é \\(D_{12}, D_{13}, D_{23}\\). A impedância própria longitudinal por unidade de comprimento considerando o solo como retorno ideal é",
+                options: [
+                    "\\(j \\cdot f \\cdot \\mu \\cdot Ln \\left( \\frac{2 \\sqrt[3]{H_1 H_2 H_3}}{R} \\right)\\)",
+                    "\\(j \\cdot f \\cdot \\mu \\cdot Ln \\left( \\frac{\\sqrt[3]{H_1 H_2 H_3}}{R} \\right)\\)",
+                    "\\(j \\cdot f \\cdot \\mu \\cdot Ln \\left( \\frac{\\sqrt[3]{D_{12} D_{13} D_{23}}}{R} \\right)\\)",
+                    "\\(j \\cdot f \\cdot \\mu \\cdot Ln \\left( \\frac{\\sqrt[3]{H_1 H_2 H_3}}{\\sqrt[3]{D_{12} D_{13} D_{23}}} \\right)\\)",
+                    "\\(j \\cdot f \\cdot \\mu \\cdot Ln \\left( \\frac{\\sqrt[3]{D_{12} D_{13} D_{23}}}{\\sqrt[3]{H_1 H_2 H_3}} \\right)\\)"
+                ],
+                answer: 0 // A
+            },
+            {
+                number: 60,
+                text: "Em um circuito CC, uma fonte de 30V alimenta uma combinação de capacitores e resistores. A chave 'ch' está aberta por muito tempo, carregando os capacitores. No exato instante (t=0) em que a chave 'ch' é fechada, qual o valor, em A, da corrente medida num amperímetro colocado na malha central?",
+                options: ["0", "2", "5", "10", "12"],
+                answer: 0 // A
+            },
+            {
+                number: 61,
+                text: "A Aneel define biomassa como todo recurso renovável oriundo de matéria orgânica. Dentre os recursos utilizados na totalização da geração de energia elétrica no Brasil por biomassa, qual é o recurso mais utilizado?",
+                options: ["Madeira", "Biogás", "Licor Negro", "Casca de Arroz", "Bagaço de Cana"],
+                answer: 4 // E
+            },
+            {
+                number: 62,
+                text: "A norma NBR 5410:2004 define os tipos de aterramento. Ela define o condutor PEN como o condutor que combina as funções de neutro e proteção. Qual esquema utiliza o condutor PEN em sua configuração?",
+                options: ["Nenhum", "IT", "TT", "TN-S", "TN-C"],
+                answer: 4 // E
+            },
+            {
+                number: 63,
+                text: "Considerando um voltímetro e um amperímetro ideais, quais devem ser os valores para a impedância de entrada (para o voltímetro) e a queda de tensão interna (para o amperímetro), respectivamente?",
+                options: [
+                    "Infinita e Infinita",
+                    "Infinita e Infinita", // Duplicate just for filler
+                    "Infinita e Zero",
+                    "Zero e Infinita",
+                    "Zero e Zero"
+                ],
+                answer: 2 // C
+            },
+            {
+                number: 64,
+                text: "Um alimentador elétrico, cujo fio condutor de cobre possui bitola S de \\(50 mm^2\\), foi submetido a uma corrente de curto-circuito de 5,0 kA. A integral de Joule dita que \\(t = (k \\cdot S / I)^2\\). Sendo k=115, o tempo máximo em que a proteção deve atuar é, em segundos:",
+                options: ["2,64", "1,93", "1,55", "1,32", "1,15"],
+                answer: 3 // D
+            },
+            {
+                number: 65,
+                text: "Um sistema elétrico de baixa tensão é dotado do esquema de aterramento IT com o neutro aberto (isolado). Em um equipamento elétrico monofásico dessa instalação ocorreu uma falta da fase para a massa/terra. Diante dessa PRIMEIRA falta, ocorrerá o:",
+                options: [
+                    "desarme do circuito pelo disjuntor",
+                    "desarme do circuito pelo DR",
+                    "desarme do circuito pelo DSI",
+                    "alarme provocado pelo DSI",
+                    "alarme provocado pelo DR"
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 66,
+                text: "A proteção diferencial longitudinal (87) é recomendada para máquinas rotativas. Essa proteção diferencial é amplamente utilizada para atuar na ocorrência de falta entre",
+                options: ["três fases", "três fases e terra", "fase e fase", "fase e terra", "neutro e terra"],
+                answer: 2 // C
+            },
+            {
+                number: 67,
+                text: "No circuito amplificador operacional ideal configurado como não inversor, a tensão Vi = 1,5V é dividida por resistores na entrada V+. O ramo de realimentação também tem um divisor de tensão. Ao resolver a malha, determina-se que a corrente elétrica que circula pela carga \\(R_L = 3,0 k\\Omega\\) conectada na saída é de:",
+                options: ["1,0 mA", "1,2 mA", "2,0 mA", "5,0 mA", "6,0 mA"],
+                answer: 2 // C (V0 = 6V -> 6V / 3k = 2mA)
+            },
+            {
+                number: 68,
+                text: "Num circuito retificador, a tensão na entrada é \\(V_S(t) = 200 \\cdot sen(120\\pi t)\\). Dois diodos e resistores formam os caminhos de condução de meia onda positiva e negativa com resistências equivalentes diferentes no retorno. O nível médio da tensão, em volts, sobre o resistor de carga \\(R_L\\) será:",
+                options: [
+                    "\\(50/\\pi\\)",
+                    "\\(100/\\pi\\)",
+                    "\\(150/\\pi\\)",
+                    "\\(200/\\pi\\)",
+                    "\\(250/\\pi\\)"
+                ],
+                answer: 2 // C
+            },
+            {
+                number: 69,
+                text: "Um circuito lógico fornece W=1 para (000, 100, 101, 111) e W=0 para o restante. A expressão minimizada correspondente ao circuito que realiza tal função lógica é equivalente a:",
+                options: [
+                    "XY + YZ",
+                    "XZ + \\(\\bar{Y}\\bar{Z}\\)",
+                    "\\(\\bar{X}Z + Y\\)",
+                    "X\\(\\bar{Y}\\) + Z",
+                    "X + YZ"
+                ],
+                answer: 1 // B
+            },
+            {
+                number: 70,
+                text: "Em um conversor Buck-Boost operando em condução contínua, o sinal da chave \\(V_{CH}\\) permanece em nível alto por \\(15 \\mu s\\) em um período total de \\(25 \\mu s\\). Sabendo que a fonte \\(V_{DC} = 12 V\\), a tensão média \\(V_0\\) de saída em módulo será:",
+                options: ["8", "10", "12", "15", "18"],
+                answer: 4 // E (V0 = 12 * 0.6 / 0.4 = 18V)
+            }
+        ];
+
+        const letters = ["A", "B", "C", "D", "E"];
+        const container = document.getElementById('questions-container');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = "bg-white p-6 rounded-lg shadow-md";
+            
+            let html = `<h3 class="text-lg font-bold mb-4 border-b pb-2">Questão ${q.number}</h3>`;
+            html += `<p class="mb-4 text-gray-700 leading-relaxed overflow-x-auto">${q.text}</p>`;
+            html += `<div class="space-y-3">`;
+            
+            q.options.forEach((opt, optIndex) => {
+                html += `
+                    <label id="label-q${index}-opt${optIndex}" class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition w-full">
+                        <input type="radio" name="q${index}" value="${optIndex}" class="mr-3 w-5 h-5 text-indigo-600 border-gray-300 focus:ring-indigo-500 flex-shrink-0">
+                        <span class="font-bold text-gray-500 mr-3">${letters[optIndex]})</span>
+                        <span class="text-gray-800 flex-1 overflow-x-auto">${opt}</span>
+                    </label>
+                `;
+            });
+            
+            html += `</div>`;
+            questionDiv.innerHTML = html;
+            container.appendChild(questionDiv);
+        });
+
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            let score = 0;
+            
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                
+                // Limpar classes CSS se existirem
+                for(let i = 0; i < 5; i++) {
+                    document.getElementById(`label-q${index}-opt${i}`).classList.remove('correct-answer', 'wrong-answer', 'missed-correct');
+                }
+                
+                // Tratar gabarito
+                const correctLabel = document.getElementById(`label-q${index}-opt${q.answer}`);
+                
+                if (selected) {
+                    const selectedVal = parseInt(selected.value);
+                    const selectedLabel = document.getElementById(`label-q${index}-opt${selectedVal}`);
+                    
+                    if (selectedVal === q.answer) {
+                        score++;
+                        selectedLabel.classList.add('correct-answer');
+                    } else {
+                        selectedLabel.classList.add('wrong-answer');
+                        correctLabel.classList.add('missed-correct');
+                    }
+                } else {
+                    correctLabel.classList.add('missed-correct');
+                }
+                
+                // Desabilitar todas as opções após correção
+                document.querySelectorAll(`input[name="q${index}"]`).forEach(input => input.disabled = true);
+            });
+            
+            // Exibir pontuação final
+            document.getElementById('score').innerText = score;
+            document.getElementById('result-display').classList.remove('hidden');
+            
+            // Alterar botão
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.classList.replace('bg-indigo-600', 'bg-gray-400');
+            btn.classList.replace('hover:bg-indigo-700', 'hover:bg-gray-400');
+            btn.classList.add('cursor-not-allowed');
+            btn.innerText = "Respostas Verificadas";
+            
+            // Reprocessar equações MathJax se necessário para ajustar backgrounds
+            MathJax.typesetPromise();
+            
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

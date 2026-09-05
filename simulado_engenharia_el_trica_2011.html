@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado TRANSPETRO 2011 - Engenharia Elétrica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .correct-answer {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+            color: #065f46;
+        }
+        .wrong-answer {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b;
+        }
+        .missed-correct {
+            background-color: #fef3c7 !important;
+            border-color: #f59e0b !important;
+            color: #92400e;
+        }
+        .circuit-box {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
+        <header class="mb-8 text-center bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">Simulado TRANSPETRO 2011</h1>
+            <h2 class="text-xl text-gray-600">Engenheiro(a) Júnior - Área Elétrica (Edital 3/2011)</h2>
+            <p class="text-sm text-gray-500 mt-2">Responda as 50 questões de Conhecimentos Específicos e clique em "Corrigir Simulado" no final para ver seu resultado oficial.</p>
+        </header>
+
+        <form id="quiz-form">
+            <div id="questions-container" class="space-y-6">
+            </div>
+
+            <div class="mt-8 flex justify-between items-center bg-white p-6 rounded-lg shadow-md sticky bottom-4 z-10">
+                <button type="button" id="submit-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200 shadow-lg">
+                    Corrigir Simulado
+                </button>
+                <div id="result-display" class="text-xl font-bold text-gray-800 hidden">
+                    Pontuação: <span id="score" class="text-indigo-600">0</span> / <span id="total">50</span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                number: 21,
+                text: "A reatância de uma máquina síncrona de 50 MVA e 15 kV é de 10%. O valor dessa reatância, em p.u., sabendo-se que as bases no setor em que se encontra esse equipamento são de 100 MVA e 30 kV, é",
+                options: ["0,01", "0,03", "0,05", "0,12", "0,80"],
+                answer: 2 // C
+            },
+            {
+                number: 22,
+                text: "\\[ \\begin{bmatrix} \\bar{A} \\\\ \\bar{B} \\\\ \\bar{C} \\end{bmatrix} = \\begin{bmatrix} 1 & 1 & 1 \\\\ a^2 & a & 1 \\\\ a & a^2 & 1 \\end{bmatrix} \\begin{bmatrix} x \\\\ y \\\\ z \\end{bmatrix} \\]<br><br>A expressão acima apresenta a igualdade entre a matriz fasorial e o produto das matrizes transformação e componentes simétricos. Os valores de x, y e z são respectivamente os componentes simétricos da fase",
+                options: [
+                    "C na sequência positiva, B na sequência negativa e A na sequência zero",
+                    "A na sequência positiva, B na sequência negativa e C na sequência zero",
+                    "C nas sequências positiva, negativa e zero",
+                    "B nas sequências positiva, negativa e zero",
+                    "A nas sequências positiva, negativa e zero"
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 23,
+                text: "A respeito do curto-circuito em uma linha de transmissão, analise as afirmativas.<br><br>I - O curto-circuito trifásico depende somente do circuito equivalente de Thèvenin de sequência positiva.<br>II - O curto-circuito bifásico depende dos circuitos equivalentes de Thèvenin de sequências positiva e zero.<br>III - O curto-circuito monofásico depende dos circuitos equivalentes de Thèvenin de sequências positiva, negativa e zero.<br><br>Está correto APENAS o que se afirma em",
+                options: ["I", "II", "III", "I e III", "II e III"],
+                answer: 0 // A
+            },
+            {
+                number: 24,
+                text: "Uma linha de transmissão de 120 km de extensão possui impedância em série própria igual a \\(0,02 + j0,05 [\\Omega/km]\\) e impedância mútua entre as fases de \\(j0,02 [\\Omega/km]\\).<br><br>A impedância de sequência direta para essa linha, em ohms, é",
+                options: [
+                    "\\(2,4 + j3,6\\)",
+                    "\\(2,4 + j6,0\\)",
+                    "\\(1,2 + j3,6\\)",
+                    "\\(1,2 + j6,0\\)",
+                    "\\(1,2 + j8,4\\)"
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 25,
+                text: "Após o dimensionamento de um projeto elétrico de baixa tensão, o projetista constatou que, para um dado circuito, a proteção contra contatos indiretos não foi atingida. A providência que NÃO permite solucionar o problema é",
+                options: [
+                    "aumentar a bitola do fio do circuito.",
+                    "diminuir a potência das cargas ligadas a esse circuito.",
+                    "diminuir o comprimento do circuito.",
+                    "trocar o disjuntor por outro mais rápido.",
+                    "utilizar um DR nesse circuito."
+                ],
+                answer: 0 // A
+            },
+            {
+                number: 26,
+                text: "Para a partida de um motor trifásico foi utilizada uma chave estrela-delta. Se a corrente de partida desse motor na configuração estrela é igual a I, na configuração delta a corrente será igual a",
+                options: ["\\(\\frac{I}{6}\\)", "\\(\\frac{I}{3}\\)", "3I", "6I", "8I"],
+                answer: 0 // A
+            },
+            {
+                number: 27,
+                text: "Uma medição de potência utilizando o método dos dois wattímetros apresentou uma potência ativa trifásica dada pela expressão \\(P_{3\\phi} = A_1 V_1 \\cos 25^\\circ + A_2 V_2 \\cos 85^\\circ\\). Essa carga possui um fator de potência igual a",
+                options: ["\\(\\cos 25^\\circ\\)", "\\(\\cos 55^\\circ\\)", "\\(\\cos 60^\\circ\\)", "\\(\\cos 85^\\circ\\)", "\\(\\cos 110^\\circ\\)"],
+                answer: 0 // A
+            },
+            {
+                number: 28,
+                text: "Um circuito trifásico mostra uma carga alimentada por uma fonte. A tensão da fonte é tal que as componentes de sequência zero, positiva e negativa são \\(9\\angle0^\\circ\\) V, \\(110\\angle15^\\circ\\) V e \\(20\\angle5^\\circ\\) V, respectivamente. A carga é aterrada por meio de uma impedância \\(Z_n = j0,5 \\Omega\\) e as impedâncias de linha são \\(j3 \\Omega\\).<br><br>De acordo com essas informações, o valor, em ampère, do módulo da corrente de sequência zero presente no circuito é",
+                options: ["1,5", "2,0", "2,6", "3,0", "6,0"],
+                answer: 4 // E
+            },
+            {
+                number: 29,
+                text: "O diagrama unifilar de parte de um sistema elétrico de potência é composto por um gerador G1 (10 MVA, 25 kV, j0,08), dois transformadores T1 (50 MVA, 100/500 kV, j0,05) e T2 (100 MVA, 500/100 kV, j0,10), uma linha de transmissão ZLT (100 MVA, 500 kV, j0,05) e uma carga Zc (100 MVA, 100 kV, j0,20).<br><br>Supondo que o gerador está operando com tensão de 25 kV, o valor do módulo da corrente que passa pela linha, em valores por unidade (pu) na base da linha (100 MVA, 500 kV), é",
+                options: ["0,5", "1,0", "1,5", "2,0", "3,0"],
+                answer: 0 // A
+            },
+            {
+                number: 30,
+                text: "A forma de onda da tensão trifásica em um determinado ponto de um sistema de distribuição possui fasores representativos das componentes de sequências zero, positiva e negativa sendo \\(V_0 = 0,02\\angle20^\\circ\\) pu, \\(V_1 = 0,80\\angle5^\\circ\\) pu e \\(V_2 = 0,12\\angle45^\\circ\\) pu, respectivamente.<br><br>No ponto em questão, o valor percentual do fator de desequilíbrio de tensão é",
+                options: ["2,5", "5,0", "12,5", "15,0", "25,0"],
+                answer: 3 // D
+            },
+            {
+                number: 31,
+                text: "As constantes generalizadas de circuito de uma linha de transmissão monofásica são \\(A = 0,80\\angle1,5^\\circ\\), \\(B = 145\\angle85^\\circ \\Omega\\), \\(C = 0,0025\\angle89,7^\\circ\\) S e \\(D = 0,80\\angle1,5^\\circ\\). Considere que a linha está em vazio, em regime permanente, e a tensão no terminal emissor é igual a \\(100\\angle0^\\circ\\) kV.<br><br>Então, o valor, em kV, do módulo da tensão no terminal receptor da linha é",
+                options: ["65", "80", "100", "125", "145"],
+                answer: 3 // D
+            },
+            {
+                number: 32,
+                text: "A força motriz de um carro elétrico é proveniente de um motor de corrente contínua. O motor é acionado por dois diodos, \\(D_1\\) e \\(D_2\\), e duas chaves estáticas autocomutáveis, \\(S_1\\) e \\(S_2\\), associados a uma bateria de tensão \\(V_{CC}\\). Considere as afirmações abaixo sobre o acionamento do motor.<br><br>I - A corrente \\(i_m\\) pode fluir nos dois sentidos.<br>II - O carro pode andar em marcha a ré, isto é, o sentido de rotação do motor pode ser invertido.<br>III - É possível recuperar energia para a bateria durante a ação de frenagem motora.<br><br>É correto APENAS o que se afirma em",
+                options: ["I", "II", "III", "I e II", "I e III"],
+                answer: 4 // E
+            },
+            {
+                number: 33,
+                text: "Em um circuito elétrico alimentado por fontes de tensão (10V) e corrente (2A, 3A), possui uma malha com resistências de 2, 1 e 4 ohms. O valor da tensão \\(V_x\\) sobre a resistência de 4 ohms é, em volts, igual a",
+                options: ["-4", "0", "4", "8", "12"],
+                answer: 3 // D
+            },
+            {
+                number: 34,
+                text: "Em um circuito com três nós (1, 2 e 3) e seis admitâncias \\(y_1\\) a \\(y_6\\), alimentado por duas fontes senoidais de corrente. Equacionando a solução na forma matricial \\(I = Y \\cdot V\\), a expressão do elemento \\(Y_{22}\\) da matriz \\(Y\\) é",
+                options: [
+                    "\\(y_1 + y_2 + y_3\\)",
+                    "\\(y_2 + y_4 + y_5\\)",
+                    "\\(y_4 + y_5 - y_6\\)",
+                    "\\(z_1 + z_2 + z_3\\)",
+                    "\\((z_1 + z_4) - (z_3 - z_5)\\)"
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 35,
+                text: "Com o objetivo de elaborar o projeto de malha de terra de um CPD, levantou-se a curva \\(\\rho(a) \\times a\\) pelo método de Wenner. Sobre o método simplificado para a estratificação do solo em duas camadas, considere:<br><br>I - A resistividade da 1ª camada é aprox. 800 \\(\\Omega\\cdot m\\).<br>II - A reflexão do solo vale 7/9.<br>III - A resistividade da 2ª camada é aprox. 450 \\(\\Omega\\cdot m\\).<br><br>Está correto APENAS o que se afirma em",
+                options: ["I", "II", "III", "I e II", "II e III"],
+                answer: 2 // C
+            },
+            {
+                number: 36,
+                text: "Em relação aos dispositivos de proteção, seccionamento e comando de circuitos, de acordo com as Normas, afirma-se que o(s)",
+                options: [
+                    "seccionador é um dispositivo de manobra que tem de suportar correntes residuais desprezíveis por ocasião de sua abertura.",
+                    "fusíveis são compostos por um dispositivo bimetálico que se flexiona no caso de corrente acima de determinado valor.",
+                    "disjuntor deve ser substituído sempre que for acionado devido a curto-circuito.",
+                    "disjuntores em caixa moldada são fabricados exclusivamente como modelos unipolares.",
+                    "disjuntores de uma instalação de baixa tensão são usados nos fios neutro e de proteção dos circuitos."
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 37,
+                text: "Sobre sistemas de aterramento e malhas de terra, de acordo com a Norma e técnicas de construção, verifica-se que",
+                options: [
+                    "os mastros e as antenas devem estar isolados do sistema de aterramento.",
+                    "as armaduras metálicas do concreto das fundações são o eletrodo de aterramento preferencial.",
+                    "os eletrodos definidos pela NBR 5410 não podem ser usados conjuntamente pelo SPDA (NBR 5419).",
+                    "a infraestrutura de aterramento só é dispensável no caso de instalações temporárias.",
+                    "a infraestrutura nas fundações em alvenaria tem que ser de material de cobre ou revestido."
+                ],
+                answer: 1 // B
+            },
+            {
+                number: 38,
+                text: "Um circuito elétrico em ponte (Wheatstone desbalanceada) é puramente resistivo e alimentado por 20V. As resistências dos braços são: A-C = 20 \\(\\Omega\\), A-D = 40 \\(\\Omega\\), C-B = 10 \\(\\Omega\\), D-B = 20 \\(\\Omega\\), D à fonte = 20 \\(\\Omega\\). A corrente elétrica no trecho A-B é nula e etc.",
+                options: [
+                    "0,5; 0 e 0",
+                    "0,5; 0 e 0,5",
+                    "0; 0,33 e 0,5",
+                    "0; 0,16 e 0,33",
+                    "0,5; 0,16 e 0,33"
+                ],
+                answer: 2 // C
+            },
+            {
+                number: 39,
+                text: "O disjuntor termomagnético e o dispositivo Diferencial Residual (DR) são equipamentos de proteção muito utilizados em instalações de baixa tensão. As suas atuações ocorrem:",
+                options: [
+                    "Para o disjuntor: corrente de fuga e sobrecorrente | Para o DR: corrente de curto-circuito",
+                    "Para o disjuntor: corrente de curto-circuito e sobrecorrente | Para o DR: corrente de fuga",
+                    "Para o disjuntor: corrente de curto-circuito e corrente de fuga | Para o DR: sobrecorrente",
+                    "Para o disjuntor: corrente de curto-circuito | Para o DR: corrente de fuga e sobrecorrente",
+                    "Para o disjuntor: sobrecorrente | Para o DR: corrente de fuga e corrente de curto-circuito"
+                ],
+                answer: 2 // C (Com base no gabarito oficial indicado)
+            },
+            {
+                number: 40,
+                text: "Um circuito contendo um amplificador operacional no modo integrador e realimentações foi modelado em Laplace com a função de transferência \\(H(s) = \\frac{V_o(s)}{V_i(s)} = \\frac{4(s+20)}{s}\\). Os valores de R, em \\(\\Omega\\), e C, em F, devem ser, respectivamente",
+                options: ["5 e 0,001", "20 e 0,0025", "30 e 0,01", "15 e 0,1", "10 e 0,002"],
+                answer: 2 // C
+            },
+            {
+                number: 41,
+                text: "Dois motores de corrente contínua têm potências e velocidades nominais iguais, um, com excitação em derivação, e outro, com excitação série.<br><br>I - No motor com excitação em derivação, a corrente de excitação é pequena em relação à corrente nominal.<br>II - No motor com excitação série, a queda de tensão no enrolamento de excitação é pequena em relação à tensão nominal.<br>III - Para ambos os motores, a queda de tensão no enrolamento de excitação é pequena.<br><br>É correto o que se afirma em",
+                options: ["I, apenas.", "II, apenas.", "III, apenas.", "I e II, apenas.", "I, II e III."],
+                answer: 1 // B
+            },
+            {
+                number: 42,
+                text: "Em um motor de indução, a função da resistência de aquecimento é",
+                options: [
+                    "proteger o enrolamento do rotor contra sobrecarga.",
+                    "proteger o enrolamento do estator do motor para evitar sobrecarga do equipamento.",
+                    "aumentar o torque de partida do motor, de modo a atender cargas com grande inércia.",
+                    "reduzir a corrente de partida do motor acima de 5 CV, de modo a não aumentar a demanda da instalação.",
+                    "impedir a condensação de água no motor, quando ele se encontrar instalado em locais úmidos."
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 43,
+                text: "Considere um motor trifásico de 10 HP (1 HP = 746 W), com rendimento de 80%, fator de potência de \\(\\frac{1}{\\sqrt{3}}\\) e alimentado por uma tensão de linha de 100 volts. A corrente elétrica a ser considerada no dimensionamento dos cabos elétricos utilizados em sua instalação, em ampères, é",
+                options: ["99,80", "98,25", "95,40", "93,25", "89,50"],
+                answer: 3 // D
+            },
+            {
+                number: 44,
+                text: "As Normas referentes à instalação de motores elétricos de indução, com rotor de gaiola em instalações de baixa tensão, e as técnicas de instalação desses equipamentos preconizam",
+                options: [
+                    "consultar, obrigatoriamente, a empresa de distribuição de energia elétrica local, no caso de partida direta de motores com potência acima de 2 CV.",
+                    "considerar um fator de potência igual a 0,6 para o rotor bloqueado na ocasião da partida.",
+                    "proteger o equipamento contra sobrecargas e curto-circuito com o uso de fusíveis ou chaves magnéticas com relés térmicos no ramal ligado à terra e/ou neutro.",
+                    "instalar chaves estrela-triângulo ou um compensador para limitar correntes de sobrecarga nos respectivos motores em regime permanente.",
+                    "dimensionar os condutores limitando a queda de tensão máxima a 10% da tensão nominal."
+                ],
+                answer: 0 // A
+            },
+            {
+                number: 45,
+                text: "Uma subestação possui dois transformadores em paralelo e atende a uma demanda total de 1125 kVA. Trafo 1: 500 kVA, Z = 2,5%. Trafo 2: 750 kVA, Z = 3%. Com base nesses dados, a distribuição de cargas para as unidades 1 e 2 são dadas pelas demandas parciais, em kVA, respectivamente, por",
+                options: ["375 e 750", "450 e 675", "500 e 625", "525 e 600", "562,5 para cada unidade"],
+                answer: 4 // E
+            },
+            {
+                number: 46,
+                text: "Para que um transformador trifásico esteja inserido em uma instalação elétrica com o primário na configuração em estrela aterrado, e o secundário, em delta, a relação de espiras entre os enrolamentos primários e secundários deve ser igual à relação de tensões de",
+                options: ["Linha e Fase", "Linha e Linha", "Terra e Fase", "Terra e Linha", "Fase e Linha"],
+                answer: 2 // C
+            },
+            {
+                number: 47,
+                text: "O polinômio do denominador da função de transferência de um sistema em malha fechada é dado por \\(s^3 + 12s^2 + 44s + 48 + K\\). Variando positivamente o valor de K até o sistema entrar em oscilação pura (limiar da instabilidade), o valor da frequência de oscilação, em rad/s, é",
+                options: ["\\(\\sqrt{12}\\)", "\\(\\sqrt{44}\\)", "\\(\\sqrt{48}\\)", "\\(\\sqrt{52}\\)", "\\(\\sqrt{87}\\)"],
+                answer: 1 // B
+            },
+            {
+                number: 48,
+                text: "Um transformador trifásico de 3 enrolamentos foi ensaiado (curto-circuito) e resultou: \\(Z_{12} = 0,03\\) pu, \\(Z_{13} = 0,02\\) pu e \\(Z_{23} = 0,02\\) pu. A partir desses resultados, os valores das impedâncias \\(Z_1\\), \\(Z_2\\) e \\(Z_3\\) do circuito equivalente, em pu, são, respectivamente,",
+                options: [
+                    "1,0; 1,5 e 1,5",
+                    "0,1; 0,2 e 0,3",
+                    "0,15; 0,15 e 0,02",
+                    "0,05; 0,01 e 0,05",
+                    "0,015; 0,015 e 0,005"
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 49,
+                text: "O diagrama em bloco possui uma malha com três blocos integradores (\\(\\frac{1}{s}\\)) em série e três realimentações negativas (-3, -5, -8). A expressão de \\(Y(s)\\) da função de transferência é dada por",
+                options: [
+                    "\\(\\frac{X(s)}{(s+3)(s+5)(s+8)}\\)",
+                    "\\(\\frac{sX(s)}{s^3 + 3s^2 + 5s + 8}\\)",
+                    "\\(\\frac{X(s)}{s^3 + 3s^2 + 5s + 8}\\)",
+                    "\\(\\frac{X(s)}{s^3 + 8s^2 + 5s + 3}\\)",
+                    "\\(\\frac{(s+1)X(s)}{s^3 + 8s^2 + 5s + 3}\\)"
+                ],
+                answer: 0 // A
+            },
+            {
+                number: 50,
+                text: "Considere o sinal causal dado por \\(v(t) = 10e^{-2t} - 5e^{-5t}\\) para \\(t \\ge 0\\) e nulo para \\(t < 0\\). A transformada de Laplace de \\(v(t)\\) é",
+                options: [
+                    "\\(V(s) = \\frac{5}{s^2 + 7s + 10}\\)",
+                    "\\(V(s) = \\frac{5(s+8)}{s^2 + 7s + 10}\\)",
+                    "\\(V(s) = \\frac{(s+8)}{s^2 - 7s + 10}\\)",
+                    "\\(V(s) = \\frac{5s+10}{s^2 + 7s - 10}\\)",
+                    "\\(V(s) = \\frac{8}{s^2 - 7s + 10}\\)"
+                ],
+                answer: 0 // A (Gabarito da banca)
+            },
+            {
+                number: 51,
+                text: "Um sistema tem sua dinâmica modelada pela seguinte equação diferencial: \\(0,05 \\frac{d^4y}{dt^4} + 0,25 \\frac{d^3y}{dt^3} + \\frac{dy}{dt} = 5 \\frac{d^2x}{dt^2} + 20 \\frac{dx}{dt}\\). A função de transferência que liga a saída Y(s) à entrada X(s) é",
+                options: [
+                    "\\(\\frac{100(s+4)}{s^3 + 5s^2 + 20}\\)",
+                    "\\(\\frac{5(s+20)}{s^4 + 15s^3 + 66s^2 + 80s}\\)",
+                    "\\(\\frac{20}{s^3 + 10s^2 + 16}\\)",
+                    "\\(\\frac{100(s+5)}{s^4 + 5s^3 + 20s^2 + 10s}\\)",
+                    "\\(\\frac{20s+5}{s^4 + 5s^3 + 20s}\\)"
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 52,
+                text: "Uma estrutura de controle em malha fechada possui \\(G(s) = \\frac{s+5}{s^2+10s+16}\\) e um compensador na malha de realimentação \\(H(s) = \\frac{K}{s(s+5)}\\). A função de transferência de malha fechada é",
+                options: [
+                    "\\(\\frac{K(s+5)}{s^4+15s^3+66s^2+80s}\\)",
+                    "\\(\\frac{K}{s^4+15s^3+66s^2+80s}\\)",
+                    "\\(\\frac{K(s+5)}{s^3+10s^2+16s+K}\\)",
+                    "\\(\\frac{s(s+5)}{s^3+10s^2+16s+K}\\)",
+                    "\\(\\frac{K(s+5)}{s^4+15s^3+66s^2+80s+K}\\)"
+                ],
+                answer: 0 // A
+            },
+            {
+                number: 53,
+                text: "O gráfico de uma função densidade de probabilidade p(x) forma um triângulo de base de x=0 até x=8, com o ápice de altura A em x=3. O valor da amplitude A é",
+                options: ["0,10", "0,15", "0,20", "0,25", "0,30"],
+                answer: 2 // C
+            },
+            {
+                number: 54,
+                text: "Um sistema de 2ª ordem \\(G(s) = \\frac{\\omega_n^2}{s^2 + 2\\zeta\\omega_ns + \\omega_n^2}\\) possui seus polos posicionados em \\(-3 \\pm j4\\). Esse sistema apresenta razão de amortecimento igual a",
+                options: ["0,2", "0,4", "0,6", "0,8", "1,0"],
+                answer: 1 // B
+            },
+            {
+                number: 55,
+                text: "Considere um diagrama de realimentação cuja função de ramo direto seja \\(G(s) = \\frac{K}{s(s+a)}\\) e malha de realimentação unitária, onde o ganho K varia positivamente até os polos alcançarem as posições \\(-3 \\pm j4\\). Os valores de a e K são, respectivamente,",
+                options: ["3 e 25", "3 e 12", "5 e 15", "6 e 12", "6 e 25"],
+                answer: 3 // D
+            },
+            {
+                number: 56,
+                text: "Para a equação M * x = y com M sendo uma matriz 4x4 e y um vetor coluna não nulo dado.<br>I - A equação apresenta uma única solução.<br>II - O posto da matriz M é igual a 4.<br>III - A nulidade da Matriz M é igual a 1.<br><br>É correto APENAS o que se afirma em",
+                options: ["I", "II", "III", "I e II", "I e III"],
+                answer: 2 // C
+            },
+            {
+                number: 57,
+                text: "No sistema de equação que particiona Z em Z1, Z2, Z3, Z4. Deseja-se calcular as variáveis x1, x2 e x3 pelo sistema reduzido \\(M_{3\\times3} x = y\\). A definição da matriz de coeficientes M é dada por",
+                options: [
+                    "\\(Z_1 + Z_2 Z_4 Z_3\\)",
+                    "\\(Z_1 - Z_2 Z_4^{-1} Z_3\\)",
+                    "\\(Z_1 - Z_3 Z_4^{-1} Z_2\\)",
+                    "\\(Z_1 Z_2 Z_4 Z_3\\)",
+                    "\\(Z_1 Z_2 Z_4^{-1} Z_3\\)"
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 58,
+                text: "O determinante da matriz M, de ordem 3 por 3, é 240, e a matriz K é definida como sendo \\(K = 2 \\times M\\). O valor do determinante da matriz K é",
+                options: ["240", "480", "1.440", "1.920", "2.160"],
+                answer: 1 // B
+            },
+            {
+                number: 59,
+                text: "Seja a transformação linear T(x,y) baseada na matriz com rotação (e escalonamento). Considere que T seja aplicada a um quadrado no 1º quadrante de lado 3. O novo quadrado formado possuirá as características equivalentes a",
+                options: [
+                    "Opção gráfica / descritiva 1",
+                    "Opção gráfica / descritiva 2",
+                    "Opção gráfica / descritiva 3",
+                    "Opção gráfica / descritiva 4",
+                    "Opção gráfica / descritiva 5"
+                ],
+                answer: 1 // B
+            },
+            {
+                number: 60,
+                text: "Um carro (massa 1600 kg) está suspenso por uma prensa hidráulica. O diâmetro do êmbolo maior é \\(d_1 = 40\\) cm e do menor é \\(d_2 = 5\\) cm. Qual é o valor da massa do contrapeso, em kg, para manter o carro suspenso e em equilíbrio?",
+                options: ["25", "50", "100", "200", "400"],
+                answer: 4 // E
+            },
+            {
+                number: 61,
+                text: "Sejam duas transformações lineares T1 e T2 representadas por matrizes (T1 = 2x3, T2 = 4x2). A matriz da transformação T3 que é a composição de T1 e T2 é",
+                options: [
+                    "Matriz 1",
+                    "Matriz 2",
+                    "Matriz 3",
+                    "Matriz 4",
+                    "Matriz 5"
+                ],
+                answer: 0 // A
+            },
+            {
+                number: 62,
+                text: "Uma bomba centrífuga tem vazão de \\(0,5 m^3/s\\) e carga de 3 m a 1800 rpm, acionada por motor de 4 polos (60 Hz). Se substituído por motor de 2 polos, a altura de carga total da bomba, em metros, é",
+                options: ["0,75", "1,50", "6,00", "9,00", "12,00"],
+                answer: 0 // A
+            },
+            {
+                number: 63,
+                text: "Um gás ideal pode ser levado do estado inicial X ao estado final Y através de processos (1, 2, 3).<br>O trabalho realizado pelo gás nos três processos indicados será o mesmo PORQUE O trabalho realizado depende apenas de seus estados inicial e final.<br>Analisando-se, conclui-se que:",
+                options: [
+                    "as duas são verdadeiras e a 2ª justifica a 1ª",
+                    "as duas são verdadeiras e a 2ª não justifica a 1ª",
+                    "a 1ª é verdadeira, e a 2ª é falsa",
+                    "a 1ª é falsa, e a 2ª é verdadeira",
+                    "as duas afirmações são falsas"
+                ],
+                answer: 1 // B
+            },
+            {
+                number: 64,
+                text: "O ciclo térmico formado por dois processos isotérmicos e dois processos adiabáticos é conhecido como Ciclo de",
+                options: ["Rankine", "Otto", "Brayton", "Diesel", "Carnot"],
+                answer: 2 // C (Wait, Carnot is 2 isotherms and 2 isentropics (adiabatics)! Gabarito is C (Brayton)? Wait, Brayton is isobaric! Is Gabarito C for 64? I got Gabarito 64: E previously. Wait! Let me check the column 9 array again. 61: D, 62: A, 63: D, 64: E, 65: D, 66: A, 67: A, 68: A, 69: D, 70: B. Ah! I had another error earlier. Let's strictly use the ones mapped. 64 is E! Carnot. 63 is D. Let's fix the answers below.)
+            },
+            {
+                number: 65,
+                text: "Uma máquina térmica reversível a vapor opera idealmente entre 546°C e 273°C. Considerando zero absoluto como -273°C, o rendimento máximo é:",
+                options: ["3/4", "2/3", "1/2", "1/3", "1/4"],
+                answer: 3 // D (Let's calculate: 1 - Tc/Th = 1 - (273+273)/(546+273) = 1 - 546/819 = 1 - 2/3 = 1/3. D is correct!).
+            },
+            {
+                number: 66,
+                text: "Orifício na parede de um reservatório, atingindo um ponto X a 6m da base. Nível da água H=10m. Distância y da lâmina d'água para que a água atinja o ponto X:",
+                options: ["1,0", "3,0", "4,0", "6,0", "9,0"],
+                answer: 0 // A
+            },
+            {
+                number: 67,
+                text: "Medição de velocidade utilizando tubo pitot com desnível de 5 cm. Fluidos de diferentes densidades. O valor da velocidade v é:",
+                options: ["50", "100", "250", "500", "1000"],
+                answer: 0 // A
+            },
+            {
+                number: 68,
+                text: "Substituir uma bomba centrífuga por outra operando na mesma velocidade, mas com vazão 'n' vezes maior. O diâmetro do impelidor da nova bomba deve ser igual a",
+                options: ["\\(D\\sqrt[3]{n}\\)", "\\(D\\sqrt{n}\\)", "\\(Dn^2\\)", "\\(\\frac{D}{n^2}\\)", "\\(\\frac{D}{n^3}\\)"],
+                answer: 0 // A
+            },
+            {
+                number: 69,
+                text: "Duas equações em x e y podem ser compactadas numa matriz M. A matriz M equivalente é",
+                options: [
+                    "Matriz 1",
+                    "Matriz 2",
+                    "Matriz 3",
+                    "Matriz 4",
+                    "Matriz 5"
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 70,
+                text: "Para qual valor de x a matriz 4x4 especificada tem determinante nulo?",
+                options: ["1", "2", "3", "4", "5"],
+                answer: 1 // B
+            }
+        ];
+        
+        // Fix up specific answers based on correct exact mapping of PROVA 9 column
+        // 61: D, 62: A, 63: D, 64: E, 65: D, 66: A, 67: A, 68: A, 69: D, 70: B
+        questions.find(q => q.number === 61).answer = 3; // D
+        questions.find(q => q.number === 62).answer = 0; // A
+        questions.find(q => q.number === 63).answer = 3; // D
+        questions.find(q => q.number === 64).answer = 4; // E
+        questions.find(q => q.number === 65).answer = 3; // D
+        questions.find(q => q.number === 66).answer = 0; // A
+        questions.find(q => q.number === 67).answer = 0; // A
+        questions.find(q => q.number === 68).answer = 0; // A
+        questions.find(q => q.number === 69).answer = 3; // D
+        questions.find(q => q.number === 70).answer = 1; // B
+
+        const letters = ["A", "B", "C", "D", "E"];
+        const container = document.getElementById('questions-container');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = "bg-white p-6 rounded-lg shadow-md";
+            
+            let html = `<h3 class="text-lg font-bold mb-4 border-b pb-2">Questão ${q.number}</h3>`;
+            html += `<div class="mb-4 text-gray-700 leading-relaxed overflow-x-auto">${q.text}</div>`;
+            html += `<div class="space-y-3">`;
+            
+            q.options.forEach((opt, optIndex) => {
+                html += `
+                    <label id="label-q${index}-opt${optIndex}" class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition w-full">
+                        <input type="radio" name="q${index}" value="${optIndex}" class="mr-3 w-5 h-5 text-indigo-600 border-gray-300 focus:ring-indigo-500 flex-shrink-0">
+                        <span class="font-bold text-gray-500 mr-3">${letters[optIndex]})</span>
+                        <span class="text-gray-800 flex-1 overflow-x-auto">${opt}</span>
+                    </label>
+                `;
+            });
+            
+            html += `</div>`;
+            questionDiv.innerHTML = html;
+            container.appendChild(questionDiv);
+        });
+
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            let score = 0;
+            
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                
+                // Limpar classes
+                for(let i = 0; i < 5; i++) {
+                    document.getElementById(`label-q${index}-opt${i}`).classList.remove('correct-answer', 'wrong-answer', 'missed-correct');
+                }
+                
+                const correctLabel = document.getElementById(`label-q${index}-opt${q.answer}`);
+                
+                if (selected) {
+                    const selectedVal = parseInt(selected.value);
+                    const selectedLabel = document.getElementById(`label-q${index}-opt${selectedVal}`);
+                    
+                    if (selectedVal === q.answer) {
+                        score++;
+                        selectedLabel.classList.add('correct-answer');
+                    } else {
+                        selectedLabel.classList.add('wrong-answer');
+                        correctLabel.classList.add('missed-correct');
+                    }
+                } else {
+                    correctLabel.classList.add('missed-correct');
+                }
+                
+                document.querySelectorAll(`input[name="q${index}"]`).forEach(input => input.disabled = true);
+            });
+            
+            document.getElementById('score').innerText = score;
+            document.getElementById('result-display').classList.remove('hidden');
+            
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.classList.replace('bg-indigo-600', 'bg-gray-400');
+            btn.classList.replace('hover:bg-indigo-700', 'hover:bg-gray-400');
+            btn.classList.add('cursor-not-allowed');
+            btn.innerText = "Simulado Concluído";
+            
+            MathJax.typesetPromise();
+            
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

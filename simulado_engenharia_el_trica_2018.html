@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado TRANSPETRO 2018 - Engenharia Elétrica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .correct-answer {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+            color: #065f46;
+        }
+        .wrong-answer {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b;
+        }
+        .missed-correct {
+            background-color: #fef3c7 !important;
+            border-color: #f59e0b !important;
+            color: #92400e;
+        }
+        .annulled-answer {
+            background-color: #e0e7ff !important;
+            border-color: #6366f1 !important;
+            color: #3730a3;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
+        <header class="mb-8 text-center bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-600">
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">Simulado TRANSPETRO</h1>
+            <h2 class="text-xl text-gray-600">Engenheiro(a) Júnior - Elétrica (Edital 2018.1)</h2>
+            <p class="text-sm text-gray-500 mt-2">Responda as questões de Conhecimentos Específicos abaixo e clique em "Corrigir Simulado" no final. Questões anuladas concedem a pontuação automaticamente.</p>
+        </header>
+
+        <form id="quiz-form">
+            <div id="questions-container" class="space-y-6">
+                <!-- As questões serão injetadas aqui via JavaScript -->
+            </div>
+
+            <div class="mt-8 flex justify-between items-center bg-white p-6 rounded-lg shadow-md sticky bottom-4 z-10">
+                <button type="button" id="submit-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200 shadow-lg">
+                    Corrigir Simulado
+                </button>
+                <div id="result-display" class="text-xl font-bold text-gray-800 hidden">
+                    Pontuação: <span id="score" class="text-blue-600">0</span> / <span id="total">50</span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                number: 21,
+                text: "Um engenheiro está desenvolvendo um projeto de partida de um motor de indução trifásico com corrente nominal de 10 A, \\(I_p/I_n = 10\\), cujo tempo de partida estimado é de 10 s. O fusível a ser empregado possui a curva característica corrente/tempo (onde para t=10s e corrente igual a 100A a curva intercepta o valor nominal do fusível). Considerando-se os dados da curva apresentada e as características do motor, conclui-se que o fusível a ser empregado deverá ser de quantos ampères?",
+                options: ["10", "12", "16", "20", "25"],
+                answer: 3 // D
+            },
+            {
+                number: 22,
+                text: "Um motor de corrente contínua shunt, alimentado por uma fonte de tensão constante e operando em suas condições nominais, subitamente perde seu circuito de campo.<br><br>Essa falha durante a operação provocará a(o)",
+                options: [
+                    "diminuição da velocidade do motor, devido ao aumento da tensão induzida.",
+                    "inversão do fluxo de potência do motor, fazendo-o funcionar como gerador.",
+                    "aumento da corrente de carga e, consequentemente, o aumento de sua velocidade.",
+                    "aumento da tensão induzida no motor, aumentando sua velocidade.",
+                    "travamento do rotor do motor, uma vez que o torque induzido cai a zero."
+                ],
+                answer: 2 // C
+            },
+            {
+                number: 23,
+                text: "Um motor síncrono de uma indústria é empregado para acionar uma carga que demanda uma potência constante, com fator de potência indutivo. Esse motor é alimentado com tensão terminal e frequência constantes. Em determinado ponto de sua operação, ajustes são feitos no motor de modo que a corrente de campo do rotor sofra um aumento.<br><br>Considerando-se desprezíveis as perdas no motor, ocorrerá",
+                options: [
+                    "consumo de menos reativos pelo motor, em virtude do aumento da tensão induzida.",
+                    "consumo de mais reativos pelo motor, em virtude do aumento da tensão induzida.",
+                    "diminuição do torque mecânico entregue à carga, em virtude do aumento da corrente de linha.",
+                    "aumento do torque mecânico entregue à carga, em virtude do aumento da corrente de linha.",
+                    "aumento da velocidade do motor, em virtude do aumento da tensão induzida."
+                ],
+                answer: 0 // A
+            },
+            {
+                number: 24,
+                text: "Linhas de transmissão de energia são sistemas complexos que demandam certas peculiaridades em sua construção, de modo a melhorar o seu desempenho.<br><br>Dentre as soluções desenvolvidas na construção das linhas de transmissão, uma delas é a transposição, que tem por principal finalidade reduzir",
+                options: [
+                    "as perdas da linha por efeito corona.",
+                    "as perdas na linha por efeito Ferranti.",
+                    "o efeito da capacitância shunt da linha.",
+                    "o comprimento das linhas, reduzindo as perdas por efeito Joule.",
+                    "o desbalanceamento das tensões induzidas na linha, provocado pela falta de simetria da rede."
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 25,
+                text: "A característica terminal de um gerador é a curva que representa a variação de sua tensão terminal \\((V_T)\\) em função de sua corrente de carga \\((I_A)\\). Essa característica depende da forma de excitação de seu circuito de campo.<br><br>Sabendo-se que o circuito de campo do gerador é sujeito à saturação, constata-se que a curva que se inicia num valor de tensão diferente de zero e declina levemente com a carga corresponde à característica terminal típica do gerador de corrente contínua",
+                options: [
+                    "série",
+                    "shunt",
+                    "composto subtrativo curto",
+                    "composto aditivo longo",
+                    "com excitação independente"
+                ],
+                answer: 0 // A
+            },
+            {
+                number: 26,
+                text: "Um motor de indução trifásico (MIT), 220 V, 6 polos, 60 Hz, ligação Y opera com um escorregamento de 5%. Esse motor drena da rede elétrica uma corrente de 40 A e opera com um fator de potência 0,8 (indutivo).<br><br>Sabendo-se que as perdas do motor, nessas condições de operação, são 1.200 W, o valor aproximado do torque mecânico aplicado à carga, em Nm, é",
+                options: ["87", "92", "102", "112", "117"],
+                answer: 1 // B
+            },
+            {
+                number: 27,
+                text: "Fasores são elementos complexos, bastante empregados na solução de circuitos em corrente alternada, em seu estado estacionário senoidal.<br><br>Analisando-se um diagrama fasorial típico de linha curta, conclui-se que a",
+                options: [
+                    "tensão E está em fase com a queda de tensão na resistência da linha.",
+                    "tensão E está atrasada em relação à tensão terminal \\(V_T\\) de um ângulo.",
+                    "carga alimentada pelo gerador tem fator de potência indutivo.",
+                    "regulação de tensão do gerador é negativa, uma vez que \\(|E| < |V_T|\\).",
+                    "queda de tensão na reatância está \\(90^\\circ\\) atrasada em relação à corrente I do circuito."
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 28,
+                text: "Relés de sobrecorrente são dispositivos empregados para realizar a proteção de motores elétricos contra sobrecarga. Em um projeto de proteção de um motor de indução trifásico, 220 V, 17,3 kW, fator de potência 0,8 e rendimento 0,9, que tem a capacidade de operar com uma elevação de temperatura admissível de \\(40^\\circ\\text{C}\\), o valor aproximado da máxima corrente de ajuste do relé, em ampères, é",
+                options: ["41", "47", "51", "63", "79"],
+                answer: 4 // E
+            },
+            {
+                number: 29,
+                text: "Um circuito terminal de 20 m e queda de tensão de 2% alimenta uma carga monofásica pontual de 1.000 VA.<br><br>Sabendo-se que a tensão de fase da instalação onde essa carga se encontra é 200 V, a queda de tensão unitária, em V/A.km, do circuito é",
+                options: ["25", "30", "40", "55", "65"],
+                answer: 2 // C
+            },
+            {
+                number: 30,
+                text: "A equação matricial que relaciona corretamente as correntes elétricas de um sistema trifásico às suas componentes simétricas é dada por:<br><br>\\[ \\begin{bmatrix} \\dot{i}_0 \\\\ \\dot{i}_1 \\\\ \\dot{i}_2 \\end{bmatrix} = \\frac{1}{3} M \\begin{bmatrix} \\dot{i}_a \\\\ \\dot{i}_b \\\\ \\dot{i}_c \\end{bmatrix} \\]<br><br>A expressão da matriz M é:",
+                options: [
+                    "\\[ \\begin{bmatrix} 1 & \\alpha & \\alpha^2 \\\\ 1 & \\alpha^2 & \\alpha \\\\ 1 & 1 & 1 \\end{bmatrix} \\]",
+                    "\\[ \\begin{bmatrix} 1 & 1 & 1 \\\\ 1 & \\alpha^2 & \\alpha \\\\ 1 & \\alpha & \\alpha^2 \\end{bmatrix} \\]",
+                    "\\[ \\begin{bmatrix} 1 & 1 & 1 \\\\ 1 & \\alpha & \\alpha^2 \\\\ 1 & \\alpha^2 & \\alpha \\end{bmatrix} \\]",
+                    "\\[ \\begin{bmatrix} 1 & 1 & 1 \\\\ 1 & \\alpha^2 & \\alpha^2 \\\\ 1 & \\alpha & \\alpha \\end{bmatrix} \\]",
+                    "\\[ \\begin{bmatrix} 1 & 1 & 1 \\\\ 1 & \\alpha & \\alpha \\\\ 1 & \\alpha^2 & \\alpha^2 \\end{bmatrix} \\]"
+                ],
+                answer: 2 // C
+            },
+            {
+                number: 31,
+                text: "Uma carga monofásica do tipo impedância constante, composta por uma resistência de 3 ohms e indutância de \\(\\frac{0,05}{\\pi}\\) Henry, é alimentada por uma fonte de tensão ideal, senoidal, de 100 V e 40 Hz.<br><br>A corrente elétrica na carga, em ampères, é igual a",
+                options: ["10", "20", "25", "30", "50"],
+                answer: 1 // B
+            },
+            {
+                number: 32,
+                text: "O esquema de aterramento de um sistema elétrico é o TN. Um usuário dessa instalação foi submetido a um choque por meio de um contato indireto. Para a intensidade desse choque, o tempo máximo de exposição deve ser de 6 segundos. O disjuntor do circuito tem 20 A de nominal.<br><br>Sabendo-se que o disjuntor relaciona múltiplo de corrente nominal e tempo de exposição (na curva do disjuntor de 20 A, atuar em 6 s requer cerca de 5,5x a nominal), a corrente de falta deve assumir um valor, em ampères, aproximadamente igual a",
+                options: ["40", "50", "60", "80", "110"],
+                answer: 4 // E
+            },
+            {
+                number: 33,
+                text: "Um equipamento possui como valores nominais de potência e tensão, respectivamente, 20 MVA e 500 kV. Os valores de base adotados no setor onde esse equipamento se encontra são 2,5 MVA e 250 kV.<br><br>Sabendo-se que a reatância desse equipamento, para seus valores nominais, é de 0,3 pu, o novo valor, em pu, considerando-se a base adotada, será de",
+                options: ["0,15", "0,20", "0,25", "0,30", "0,35"],
+                answer: 0 // A
+            },
+            {
+                number: 34,
+                text: "Em um sistema elétrico de potência, um transformador na configuração estrela, aterrado em um lado e estrela não aterrado para o outro, é representado no diagrama de reatâncias de sequência zero por uma reatância",
+                options: [
+                    "em série no sistema",
+                    "aberta no sistema",
+                    "em paralelo no sistema",
+                    "isolada em paralelo no sistema",
+                    "em série no sistema e outra em paralelo"
+                ],
+                answer: 1 // B
+            },
+            {
+                number: 35,
+                text: "Um curto-circuito fase-terra ocorre em um sistema trifásico. Sabe-se que a corrente de sequência positiva no ponto da falta é igual a 5 pu. As bases adotadas no setor da falta são 4 MVA e 100 kV.<br><br>A corrente de curto-circuito dessa falta, em ampères, é igual a",
+                options: ["200", "\\(200\\sqrt{3}\\)", "450", "\\(600\\sqrt{3}\\)", "600"],
+                answer: 1 // B
+            },
+            {
+                number: 36,
+                text: "Considere um sistema linear, contínuo e invariante no tempo, submetido a uma realimentação proporcional de saída. A função de transferência em malha fechada é \\( \\frac{K}{s^3 + 10s^2 + 15s + K} \\) em que \\( K > 0 \\) é o ganho proporcional de realimentação.<br><br>Qual o valor do ganho K no limiar da instabilidade desse sistema em malha fechada?<br><br>*(Questão Anulada no Gabarito Oficial)*",
+                options: ["200", "150", "100", "50", "25"],
+                answer: -1 // Anulada
+            },
+            {
+                number: 37,
+                text: "Uma sequência \\(x(n)\\) discreta e causal, que significa dizer que \\(x(n)=0\\) para \\(n < 0\\), tem como transformada Z a expressão: \\( X(z) = \\frac{7z^2 - 11z}{z^2 - 4z + 3} \\).<br><br>A expressão mais simples, em função do degrau unitário \\(u(n)\\) que melhor exprime analiticamente essa sequência é:",
+                options: [
+                    "\\(x(n) = 7u(n) - 11u(n-1)\\)",
+                    "\\(x(n) = 5u(n) - 2(5)^n u(n-1)\\)",
+                    "\\(x(n) = 2u(n) + 5(3)^n u(n)\\)",
+                    "\\(x(n) = 5u(n) + 2(3)^n u(n)\\)",
+                    "\\(x(n) = 2u(n) + 11(4)^n u(n)\\)"
+                ],
+                answer: 2 // C
+            },
+            {
+                number: 38,
+                text: "O modelo de um sistema linear está representado a seguir pelas suas equações de estado:<br><br>\\[ \\dot{X}(t) = \\begin{bmatrix} 0 & 1 \\\\ -15 & -8 \\end{bmatrix} X(t) + \\begin{bmatrix} 0 \\\\ 1 \\end{bmatrix} u(t) \\]<br>e saída \\( y(t) = \\begin{bmatrix} 1 & 2 \\end{bmatrix} X(t) \\)<br><br>Sobre esse sistema é aplicado um controle com realimentação de estados, cuja lei de controle é dada por \\( u(t) = -K X(t) + r(t) \\), onde são definidos o vetor de ganhos \\( K = \\begin{bmatrix} k_1 & k_2 \\end{bmatrix} \\) e \\( r(t) \\) o sinal de entrada de referência.<br><br>Para que em malha fechada os polos desse sistema sejam complexos conjugados e alocados em \\(s = -5 \\pm j10\\), qual será o valor do vetor de ganhos K?",
+                options: [
+                    "\\( K = \\begin{bmatrix} 10 & 5 \\end{bmatrix} \\)",
+                    "\\( K = \\begin{bmatrix} 50 & 4 \\end{bmatrix} \\)",
+                    "\\( K = \\begin{bmatrix} 110 & 2 \\end{bmatrix} \\)",
+                    "\\( K = \\begin{bmatrix} 120 & 2 \\end{bmatrix} \\)",
+                    "\\( K = \\begin{bmatrix} 110 & 4 \\end{bmatrix} \\)"
+                ],
+                answer: 2 // C
+            },
+            {
+                number: 39,
+                text: "Considere as seguintes equações de estado que representam um modelo linear de um sistema de 2ª ordem discreto:<br><br>\\[ X(k+1) = \\Phi X(k) + \\Gamma u(k) \\] e saída \\( y(k) = C X(k) \\)<br><br>onde \\( \\Phi = \\begin{bmatrix} 1 & -2 \\\\ 5 & 10 \\end{bmatrix} \\), \\( \\Gamma = \\begin{bmatrix} -1 \\\\ 1 \\end{bmatrix} \\) e \\( C = \\begin{bmatrix} 1 & 0 \\end{bmatrix} \\)<br><br>Os polos desse sistema discreto estão localizados no plano complexo Z e são obtidos calculando-se as raízes do polinômio",
+                options: [
+                    "\\(z^2 + 10z + 5 = 0\\)",
+                    "\\(z^2 + 5z + 10 = 0\\)",
+                    "\\(z^2 - 11z + 20 = 0\\)",
+                    "\\(z^2 + 11z = 0\\)",
+                    "\\(z^2 + 15 = 0\\)"
+                ],
+                answer: 2 // C
+            },
+            {
+                number: 40,
+                text: "Um sistema linear de 2ª ordem é modelado em função de transferência por uma planta do tipo \\( G(s) = \\frac{K N(s)}{D(s)} \\), em que N(s) é o polinômio do numerador, e D(s) é o polinômio do denominador.<br><br>Quando esse sistema é submetido a uma realimentação proporcional de saída, e o ganho K varia de 0 a \\(+\\infty\\), os polos formam um lugar das raízes com um círculo centrado no eixo real, possuindo polos de malha aberta em 0 e -8, e zero em -10. Com base nos dados, a expressão da Função de Transferência de Malha Fechada em função do ganho K é",
+                options: [
+                    "\\( G(s) = \\frac{K}{s^2 + 8s + 10} \\)",
+                    "\\( G(s) = \\frac{K(s+10)}{s^2 + 10s + 8K} \\)",
+                    "\\( G(s) = \\frac{K}{s^2 + 10s + 8K + 5} \\)",
+                    "\\( G(s) = \\frac{K(s+10)}{s^2 + (8+K)s + 10K} \\)",
+                    "\\( G(s) = \\frac{K(s+8)}{s^2 + (10+K)s + 8K} \\)"
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 41,
+                text: "Seja um sistema de 2ª ordem, linear e analógico, que liga um sinal U de entrada ao sinal Y de saída e cujo modelo é representado pela função de transferência:<br><br>\\[ G(s) = \\frac{Y(s)}{U(s)} = \\frac{K(s+5)}{(s-2)(s+10)} \\]<br><br>Esse modelo foi submetido a uma realimentação proporcional de saída, fazendo com que o ganho K varie no intervalo \\( 0 < K < +\\infty \\).<br><br>Na configuração acima descrita, vai ocorrer que, para um determinado valor do ganho K, um dos dois polos de malha fechada será zero, e o outro polo, consequentemente, terá valor igual a",
+                options: ["12", "5", "-10", "-12", "-20"],
+                answer: 3 // D
+            },
+            {
+                number: 42,
+                text: "Um sistema elétrico linear tem como sinal de entrada uma tensão \\(v(t)\\) e como saída um sinal de corrente \\(i(t)\\). Sua dinâmica é modelada pela seguinte equação diferencial:<br><br>\\[ \\frac{d^2i}{dt^2} + 4\\frac{di}{dt} + 29i(t) = 10\\frac{dv}{dt} + 5v(t) \\]<br><br>A função de transferência desse sistema apresenta, no plano S de Laplace, um zero real em",
+                options: [
+                    "\\(s = -2\\) e dois polos reais \\(s = -4\\) e \\(s = -29\\)",
+                    "\\(s = -0,5\\) e dois polos reais \\(s = -2\\) e \\(s = -8\\)",
+                    "\\(s = +2\\) e dois polos complexos conjugados \\(s = -2 \\pm j5\\)",
+                    "\\(s = +0,5\\) e dois polos complexos conjugados \\(s = 2 \\pm j5\\)",
+                    "\\(s = -0,5\\) e dois polos complexos conjugados \\(s = -2 \\pm j5\\)"
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 43,
+                text: "Considere o circuito elétrico de corrente contínua composto por uma fonte de 24 V, e resistores de 24 \\(\\Omega\\), 40 \\(\\Omega\\), 25 \\(\\Omega\\), 30 \\(\\Omega\\) e 10 \\(\\Omega\\) conectados. Com base nos teoremas de Norton e Thevenin, qual é o valor, em ohms, da resistência equivalente desse circuito, medida entre os pontos centrais 1 e 2?",
+                options: ["15", "20", "35", "40", "55"],
+                answer: 1 // B
+            },
+            {
+                number: 44,
+                text: "Considere um circuito elétrico de corrente contínua e puramente resistivo (onde uma fonte de 12V alimenta um divisor formado por 12k\\(\\Omega\\) e em paralelo a ele 12k\\(\\Omega\\) e depois 2k\\(\\Omega\\)).<br><br>Conectando-se uma carga resistiva de 2 k\\(\\Omega\\) entre os terminais a e b, qual é o valor, em mW, da potência dissipada nessa carga?",
+                options: ["0,72", "0,96", "1,75", "2,24", "2,88"],
+                answer: 0 // A
+            },
+            {
+                number: 45,
+                text: "Um sinal de tensão elétrica, variando continuamente no tempo, tem sua amplitude limitada entre -5V e +5V para possibilitar a sua digitalização através de um conversor Analógico/Digital (A/D) operando com 8 bits.<br><br>Essa conversão, nas condições apresentadas acima, vai acarretar um erro na quantização da amplitude da tensão, medido em mV, de aproximadamente",
+                options: ["10", "40", "60", "100", "200"],
+                answer: 1 // B
+            },
+            {
+                number: 46,
+                text: "Foi solicitado a um engenheiro que projetasse um ramal de distribuição aéreo de 13,8 kV, de 8 km de comprimento, para alimentar diversas cargas ao longo de seu comprimento. Estima-se que as cargas a serem alimentadas por esse ramal podem ser aproximadas por uma carga trifásica uniformemente distribuída, cuja densidade linear de carga é de 250 kVA/km.<br><br>Sabendo-se que a máxima queda de tensão percentual admitida no ramal é de 4%, o maior coeficiente de queda de tensão admissível do ramal em \\(\\frac{\\%}{MVA \\cdot km}\\) é",
+                options: ["0,05", "0,20", "0,25", "0,40", "0,50"],
+                answer: 4 // E
+            },
+            {
+                number: 47,
+                text: "Considere uma rede de distribuição aérea onde se destaca um equipamento de proteção no primário do transformador (operado com vara de manobra e que atua pela fusão de um elemento interno). O dispositivo destacado é um(a)",
+                options: [
+                    "para-raio",
+                    "disjuntor",
+                    "religador",
+                    "chave-faca",
+                    "chave-fusível"
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 48,
+                text: "Uma comissão de engenheiros foi incumbida de avaliar quatro projetos de malhas de aterramento (P1, P2, P3 e P4).<br><br>Os potenciais de toque e passo admitidos para P1 são (300V, 1600V), para P2 (600V, 900V), para P3 (800V, 2000V) e para P4 (300V, 2000V). Sabe-se que os potenciais de toque e de passo admissíveis definidos pela norma são, respectivamente, 700 V e 1900 V.<br><br>Atende(m) aos critérios de dimensionamento APENAS o(s) projeto(s)",
+                options: ["P1", "P2", "P3", "P1 e P2", "P1 e P4"],
+                answer: 3 // D
+            },
+            {
+                number: 49,
+                text: "Considere um ramal de distribuição de 13,8 kV, protegido por um relé de sobrecorrente temporizado. Sabe-se que a relação de transformação do transformador de corrente é 100:5; a corrente de ajuste secundária da unidade temporizada é 3 A.<br><br>Caso ocorra uma falta bifásica no ramal, cujo valor da corrente seja de 480 A, o múltiplo da corrente de ajuste será de 8. Analisando a curva da família de curvas de tempo inverso usual, em quantos segundos, a partir do instante em que ocorreu a falta, o relé deverá atuar?",
+                options: ["3", "0,7", "0,4", "0,3", "0,1"],
+                answer: 2 // C
+            },
+            {
+                number: 50,
+                text: "Um duto cilíndrico metálico, longo, imerso na água, conduz um fluido aquecido. Sabe-se que o diâmetro interno do duto é 16 cm; a condutividade térmica do duto é \\(40 \\frac{W}{m \\cdot ^\\circ\\text{C}}\\); o coeficiente de transferência de calor por convecção da água é \\(400 \\frac{W}{m^2 \\cdot ^\\circ\\text{C}}\\); a temperatura do fluido é mantida constante; a transferência de calor está em regime permanente.<br><br>A espessura de parede do duto que confere a máxima transferência de calor do fluido à água é, em cm,",
+                options: ["0,1", "0,5", "2", "4", "8"],
+                answer: 2 // C
+            },
+            {
+                number: 51,
+                text: "O cálculo da corrente de polarização no transistor \\(Q_1\\) pode ser simplificado se o circuito de base em questão for substituído pelo seu equivalente de Thevenin. O circuito original de base possui uma fonte de 9V em série com 15 k\\(\\Omega\\), em paralelo a 30 k\\(\\Omega\\), injetando 0,4mA, e outro resistor em série de 15 k\\(\\Omega\\).<br><br>O circuito equivalente ao apresentado que produz a mesma corrente de polarização no transistor \\(Q_1\\) terá:",
+                options: [
+                    "\\(V_{BB} = 10\\text{ V}\\), \\(R_B = 15\\text{ k}\\Omega\\)",
+                    "\\(I_{BB} = 1,0\\text{ mA}\\), \\(R_B = 25\\text{ k}\\Omega\\)",
+                    "\\(V_{BB} = 6,0\\text{ V}\\), \\(R_B = 15\\text{ k}\\Omega\\)",
+                    "\\(V_{BB} = 10\\text{ V}\\), \\(R_B = 10\\text{ k}\\Omega\\)",
+                    "\\(V_{BB} = 10\\text{ V}\\), \\(R_B = 25\\text{ k}\\Omega\\)"
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 52,
+                text: "Um circuito regulador de tensão linear utiliza um Amplificador Operacional, um transistor \\(Q_1\\), resistores (incluindo \\(R_1\\) e \\(R_2=10\\text{k}\\Omega\\) que formam a malha de realimentação) e um diodo zener \\(Z_1\\) na entrada não-inversora. O amplificador operacional é considerado ideal, e o diodo zener \\(Z_1\\) apresenta uma tensão de ruptura igual a 5,0 V.<br><br>Dessa forma, qual deve ser, em quilo-ohms, o valor da resistência \\(R_1\\) de modo que o regulador entregue para a carga uma tensão igual a 12 V?",
+                options: ["10", "14", "20", "24", "25"],
+                answer: 1 // B
+            },
+            {
+                number: 53,
+                text: "Um circuito tem como objetivo controlar a potência que uma fonte de tensão alternada \\(V_S\\) entrega para uma carga resistiva \\(R_L\\). A potência na carga é controlada através do disparo de um SCR, associado em anti-paralelo com um diodo. A tensão \\(V_G\\) dispara o SCR num determinado ângulo em todos os semi-ciclos aplicáveis.<br><br>Considerando-se ideais o diodo e o SCR (sendo o disparo efetuado em 5ms, com período de 20ms e tensão de pico de 120V), a corrente média, em ampères, que circula pelo SCR é igual a",
+                options: ["0", "\\(\\frac{1}{\\pi}\\)", "\\(\\frac{2}{\\pi}\\)", "\\(\\frac{6}{\\pi}\\)", "\\(\\frac{12}{\\pi}\\)"],
+                answer: 2 // C
+            },
+            {
+                number: 54,
+                text: "Sabe-se que uma determinada transformação linear \\(T: \\mathbb{R}^3 \\rightarrow \\mathbb{R}^3\\) transforma o vetor \\(v_1 = \\begin{bmatrix} 2 \\\\ 1 \\\\ 0 \\end{bmatrix}\\) no vetor \\(u_1 = \\begin{bmatrix} 1 \\\\ 4 \\\\ 3 \\end{bmatrix}\\) e também transforma o vetor \\(v_2 = \\begin{bmatrix} 3 \\\\ 0 \\\\ 2 \\end{bmatrix}\\) no vetor \\(u_2 = \\begin{bmatrix} 2 \\\\ 6 \\\\ 1 \\end{bmatrix}\\).<br><br>Dessa forma, conclui-se que essa mesma transformação linear irá transformar o vetor \\(v_3 = \\begin{bmatrix} 1 \\\\ -1 \\\\ 2 \\end{bmatrix}\\) no vetor:",
+                options: [
+                    "\\(\\begin{bmatrix} 3 \\\\ 2 \\\\ -2 \\end{bmatrix}\\)",
+                    "\\(\\begin{bmatrix} -1 \\\\ -2 \\\\ 2 \\end{bmatrix}\\)",
+                    "\\(\\begin{bmatrix} 0 \\\\ -1 \\\\ 3 \\end{bmatrix}\\)",
+                    "\\(\\begin{bmatrix} 2 \\\\ -2 \\\\ 1 \\end{bmatrix}\\)",
+                    "\\(\\begin{bmatrix} 1 \\\\ 2 \\\\ -2 \\end{bmatrix}\\)"
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 55,
+                text: "Em uma planta industrial, uma bomba de combustível é utilizada para bombear óleo diesel para um tanque de armazenamento. Quando acionada, essa bomba mantém a vazão de óleo constante em 20 litros por minuto. O acionamento dessa bomba é comandado por um Controlador Lógico Programável (CLP), cuja lógica (B=X1 e X2) faz ela operar apenas nas janelas de tempo ativas mutuamente.<br><br>Considerando-se que o tanque de armazenamento inicia a sua operação em \\(t=0\\) completamente vazio e avaliando a interseção dos gráficos de temporização fornecidos, qual será o volume, em litros, de óleo diesel armazenado nesse mesmo tanque no instante \\(t=10\\) min?",
+                options: ["80", "100", "120", "140", "160"],
+                answer: 2 // C
+            },
+            {
+                number: 56,
+                text: "Um circuito conversor de potência do tipo CC-CC (Buck-Boost inversor) tem a finalidade de converter uma tensão não regulada \\(V_{DC}\\) em uma tensão regulada \\(V_O\\) aplicada em uma carga \\(R_L\\), onde o valor da tensão na carga é controlado através do ciclo de trabalho da chave \\(S_1\\).<br><br>Nesse conversor,",
+                options: [
+                    "o ciclo de trabalho da chave também deve ser aumentado para manter constante o valor da tensão caso a tensão \\(V_{DC}\\) aumente.",
+                    "a tensão na saída \\(V_O\\) será maior que a tensão \\(V_{DC}\\) se o ciclo de trabalho da chave \\(S_1\\) for superior a 50% do período.",
+                    "a polaridade da tensão \\(V_O\\) na saída é invertida em relação à tensão \\(V_{DC}\\) na entrada.",
+                    "a tensão média \\(V_{D1}\\) no diodo é igual à tensão média na carga \\(R_L\\) em regime permanente.",
+                    "a corrente média na resistência de carga \\(R_L\\) é igual à corrente média fornecida pelo capacitor \\(C_1\\) em regime permanente."
+                ],
+                answer: 3 // D
+            },
+            {
+                number: 57,
+                text: "Com o objetivo de caracterizar um motor de corrente contínua (CC) de ímã permanente, foram realizados dois ensaios com o motor em vazio. No primeiro ensaio, foi aplicada uma fonte de tensão constante de 60 V, e o motor apresentou uma corrente de armadura de 1,5 A e uma velocidade de 12.000 rpm. No segundo ensaio, foi aplicada uma tensão constante de 80 V e, nesse caso, o motor exibiu uma corrente de 2,0 A na armadura e atingiu uma velocidade de 16.000 rpm.<br><br>Com base nessas medições, conclui-se que a resistência elétrica do enrolamento de armadura do motor, em ohms, é igual a:<br><br>*(Questão Anulada no Gabarito Oficial)*",
+                options: ["0,6", "1,0", "1,2", "1,5", "2,0"],
+                answer: -1 // Anulada
+            },
+            {
+                number: 58,
+                text: "O circuito passivo representado R-L-C paralelo apresenta valores normalizados para os seus componentes: \\(V_1 = 12\\text{V}\\), \\(R_1 = 2\\Omega\\), \\(L_1 = 4\\text{H}\\), \\(C_1 = 1/4\\text{F}\\), \\(R_2 = 4\\Omega\\). Nesse circuito, a chave ideal (que faz um curto limitando a alimentação do lado direito) tem estado aberta por bastante tempo, até que, em \\(t=0\\) s, ela é fechada instantaneamente.<br><br>Assim, a transformada de Laplace da tensão \\(V_O\\) no capacitor após o fechamento da chave é dada por:",
+                options: [
+                    "\\(\\frac{8(s+1)}{s^2+s+1}\\)",
+                    "\\(\\frac{8s+4}{s^2+4s+1}\\)",
+                    "\\(\\frac{8s+4}{s^2+s+1}\\)",
+                    "\\(\\frac{8(s+1)}{s^2+4s+1}\\)",
+                    "\\(\\frac{4s+8}{s^2+4s+1}\\)"
+                ],
+                answer: 0 // A
+            },
+            {
+                number: 59,
+                text: "Um campo magnético B uniforme, orientado na direção \\(-y\\), encontra-se inserido no espaço. Uma partícula de massa M e carga elétrica +Q, com velocidade constante e na direção \\(-y\\), penetra no espaço do campo magnético.<br><br>Enquanto estiver no interior do campo, o módulo da velocidade instantânea da partícula e a forma de sua trajetória serão, respectivamente,",
+                options: [
+                    "crescente e hiperbólica",
+                    "decrescente e circular",
+                    "constante e elíptica",
+                    "constante e circular",
+                    "constante e retilínea"
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 60,
+                text: "Um sistema foi modelado pelas seguintes equações de estado:<br><br>\\[ \\underline{x}(k+1) = \\begin{bmatrix} 0,2 & 1 \\\\ 0 & 0,3 \\end{bmatrix} \\underline{x}(k) + \\begin{bmatrix} 1 \\\\ 2 \\end{bmatrix} u(k) \\]<br>\\[ y(k) = \\begin{bmatrix} 1 & 0 \\end{bmatrix} \\underline{x}(k) \\]<br><br>A função de transferência \\(G(z) = \\frac{Y(z)}{U(z)}\\) que corresponde a esse modelo é:",
+                options: [
+                    "\\(\\frac{z+1,3}{(z-0,2)(z-0,5)}\\)",
+                    "\\(\\frac{z+2,3}{(z-0,4)(z-0,5)}\\)",
+                    "\\(\\frac{z+2,1}{(z-0,3)(z-0,4)}\\)",
+                    "\\(\\frac{z+2,7}{(z-0,2)(z-0,4)}\\)",
+                    "\\(\\frac{z+1,7}{(z-0,2)(z-0,3)}\\)"
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 61,
+                text: "O circuito ilustrado encontra-se funcionando em regime permanente, sendo alimentado por uma fonte de tensão CC de 10 V em série com \\(4\\Omega\\), e uma fonte de corrente de 2 A, ambos em paralelo com um resistor de \\(6\\Omega\\), um capacitor de 3F e um resistor de \\(12\\Omega\\). Os componentes são considerados ideais.<br><br>Nessas condições, a corrente \\(I_L\\) que passa pelo resistor de 12 \\(\\Omega\\), medida em ampères, é",
+                options: ["0,50", "0,75", "1,50", "2,00", "2,25"],
+                answer: 1 // B
+            },
+            {
+                number: 62,
+                text: "Considere um circuito em forma de 'T' com duas resistências (Ra em série, Rb em paralelo) e um indutor L em paralelo central (entre Ra e Rb). A entrada é a tensão \\(V_i\\) e a saída é a tensão \\(V_o\\) sobre \\(R_B\\).<br><br>A função de transferência \\(\\frac{V_o(s)}{V_i(s)}\\) do circuito é:",
+                options: [
+                    "\\(\\frac{sLR_B}{sL(R_A+R_B)+R_AR_B}\\)",
+                    "\\(\\frac{sLR_B}{sLR_A+R_AR_B}\\)",
+                    "\\(\\frac{sLR_B}{sL(R_A+R_B)+R_A}\\)",
+                    "\\(\\frac{sLR_A}{sL(R_A+R_B)+R_B}\\)",
+                    "\\(\\frac{sLR_B}{sLR_B+R_A}\\)"
+                ],
+                answer: 0 // A
+            },
+            {
+                number: 63,
+                text: "A Figura ilustra um circuito em que \\(V_i\\) é a tensão de entrada ligada num resistor R em série com um capacitor C, cuja tensão é \\(V_o\\) (saída). Os componentes são considerados ideais.<br><br>A equação diferencial que relaciona \\(V_i(t)\\) e \\(V_o(t)\\) é:",
+                options: [
+                    "\\(R \\frac{dV_o}{dt} + CV_o = V_i\\)",
+                    "\\(\\frac{dV_o}{dt} + RCV_o = V_i\\)",
+                    "\\(\\frac{dV_i}{dt} + RCV_i = V_o\\)",
+                    "\\(RC \\frac{dV_i}{dt} + V_i = V_o\\)",
+                    "\\(RC \\frac{dV_o}{dt} + V_o = V_i\\)"
+                ],
+                answer: 4 // E
+            },
+            {
+                number: 64,
+                text: "Considere o triângulo ABC com base assentada sobre os eixos em (-9, 0) e (16, 0) e altura em (0, 12), onde os eixos estão em centímetros. Deseja-se inscrever, nesse triângulo, o retângulo tendo a maior área possível, observando-se que um dos seus lados estará sobre o segmento BC, um dos vértices estará apoiado no segmento AB, e o outro, no AC.<br><br>Qual é a maior área, em \\(\\text{cm}^2\\), do retângulo inscrito?",
+                options: ["56", "72", "75", "78", "85"],
+                answer: 2 // C
+            },
+            {
+                number: 65,
+                text: "Considere o seguinte sistema de equações lineares:<br><br>\\[ \\begin{bmatrix} 1 & 2 & 1 \\\\ 2 & 0 & 1 \\\\ 1 & 1 & 0 \\end{bmatrix} \\begin{bmatrix} x_1 \\\\ x_2 \\\\ x_3 \\end{bmatrix} = \\begin{bmatrix} 13 \\\\ 8 \\\\ 7 \\end{bmatrix} \\]<br><br>O valor da variável \\(x_2\\) é:",
+                options: ["1", "2", "3", "4", "5"],
+                answer: 3 // D
+            },
+            {
+                number: 66,
+                text: "Considere a matriz A apresentada a seguir:<br><br>\\[ A = \\begin{bmatrix} 1 & 2 & 0 & 0 & 0 \\\\ 4 & -1 & 0 & 0 & 0 \\\\ 0 & 0 & 3 & 0 & 0 \\\\ 0 & 0 & 0 & 5 & 2 \\\\ 0 & 0 & 0 & 2 & 1 \\end{bmatrix} \\]<br><br>Qual é o valor do determinante dessa matriz?",
+                options: ["-36", "-27", "-15", "+18", "+45"],
+                answer: 1 // B
+            },
+            {
+                number: 67,
+                text: "Um sistema formado por dois equipamentos (Equip1 = \\(\\frac{4}{s+2}\\) e Equip2 = \\(\\frac{1}{s+5}\\)), que funcionava com a chave Ch1 aberta (malha aberta), teve seu comportamento dinâmico modificado quando a chave Ch1 foi fechada habilitando um ramo de realimentação com ganho 5.<br><br>Face ao exposto acima, considerando-se uma entrada do tipo degrau em \\(r(t)\\), os tipos de comportamento dos sinais de saída \\(c(t)\\) com a chave Ch1 aberta e, em seguida, com a chave Ch1 fechada, serão, respectivamente:",
+                options: [
+                    "superamortecido e criticamente amortecido",
+                    "superamortecido e superamortecido",
+                    "superamortecido e subamortecido",
+                    "subamortecido e superamortecido",
+                    "subamortecido e subamortecido"
+                ],
+                answer: 2 // C
+            },
+            {
+                number: 68,
+                text: "Considere o processo industrial modelado por meio da função de transferência discreta e causal \\((y(k)=0\\) para \\(k < 0)\\), em que U é o sinal de entrada, e Y é o sinal de saída, dada por:<br><br>\\[ \\frac{Y(z)}{U(z)} = \\frac{10z+M}{z^2-1,2z+0,2} \\]<br><br>Medidas \\(y(kT)=y(k)\\) com \\(k=0,1,2,...\\) são obtidas a cada intervalo de tempo T quando a entrada é um impulso unitário. Sabendo-se que a resposta ao impulso unitário é dada pela sequência \\(y(k) = \\{0, 10, 17, ...\\}\\), qual é o valor do parâmetro M?",
+                options: ["1", "3", "5", "7", "9"],
+                answer: 2 // C
+            },
+            {
+                number: 69,
+                text: "O engenheiro responsável por uma planta industrial alterou seu comportamento dinâmico por meio de realimentação unitária, conforme ilustrado. Planta = \\(\\frac{J}{s(s+2)}\\).<br><br>A função de transferência equivalente de malha fechada do sistema \\( \\frac{Y(s)}{U(s)} \\) é corretamente descrita pela equação:",
+                options: [
+                    "\\(\\frac{J}{s^2 + 2s + J}\\)",
+                    "\\(\\frac{J}{s^2 + 2s}\\)",
+                    "\\(\\frac{1}{s^2 + 2s + J}\\)",
+                    "\\(\\frac{J}{s+2}\\)",
+                    "\\(\\frac{1}{s+2}\\)"
+                ],
+                answer: 0 // A
+            },
+            {
+                number: 70,
+                text: "A Figura ilustra um circuito alimentado por uma fonte de corrente de 2 A, conectado a uma ponte de resistores em forma de losango (Valores dos braços da ponte: 2R, 2R, R, 2R; Ramo central: 3R) conectada a uma carga \\(R_L = 80\\Omega\\).<br><br>Para \\(R=10 \\Omega\\), o valor da fonte de tensão do equivalente de Thévenin, em volts, para o circuito, entre os terminais da carga, é",
+                options: ["10", "20", "40", "50", "80"],
+                answer: 2 // C
+            }
+        ];
+
+        const letters = ["A", "B", "C", "D", "E"];
+        const container = document.getElementById('questions-container');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = "bg-white p-6 rounded-lg shadow-md";
+            
+            let html = `<h3 class="text-lg font-bold mb-4">Questão ${q.number}</h3>`;
+            html += `<div class="mb-4 text-gray-700 leading-relaxed overflow-x-auto">${q.text}</div>`;
+            html += `<div class="space-y-2">`;
+            
+            q.options.forEach((opt, optIndex) => {
+                html += `
+                    <label id="label-q${index}-opt${optIndex}" class="flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                        <input type="radio" name="q${index}" value="${optIndex}" class="mt-1 mr-3 w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                        <span class="font-semibold mr-2">${letters[optIndex]})</span>
+                        <span class="text-gray-700 w-full overflow-x-auto overflow-y-hidden">${opt}</span>
+                    </label>
+                `;
+            });
+            
+            html += `</div>`;
+            questionDiv.innerHTML = html;
+            container.appendChild(questionDiv);
+        });
+
+        document.getElementById('submit-btn').addEventListener('click', () => {
+            let score = 0;
+            
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                
+                // Reset styles
+                for(let i = 0; i < 5; i++) {
+                    document.getElementById(`label-q${index}-opt${i}`).classList.remove('correct-answer', 'wrong-answer', 'missed-correct', 'annulled-answer');
+                }
+                
+                // Tratar questões anuladas
+                if(q.answer === -1) {
+                    score++;
+                    for(let i = 0; i < 5; i++) {
+                        document.getElementById(`label-q${index}-opt${i}`).classList.add('annulled-answer');
+                    }
+                } else {
+                    const correctLabel = document.getElementById(`label-q${index}-opt${q.answer}`);
+                    if (selected) {
+                        const selectedVal = parseInt(selected.value);
+                        const selectedLabel = document.getElementById(`label-q${index}-opt${selectedVal}`);
+                        
+                        if (selectedVal === q.answer) {
+                            score++;
+                            selectedLabel.classList.add('correct-answer');
+                        } else {
+                            selectedLabel.classList.add('wrong-answer');
+                            correctLabel.classList.add('missed-correct');
+                        }
+                    } else {
+                        correctLabel.classList.add('missed-correct');
+                    }
+                }
+                
+                // Desativar inputs
+                document.querySelectorAll(`input[name="q${index}"]`).forEach(input => input.disabled = true);
+            });
+            
+            document.getElementById('score').innerText = score;
+            document.getElementById('result-display').classList.remove('hidden');
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').classList.add('opacity-50', 'cursor-not-allowed');
+            document.getElementById('submit-btn').innerText = "Simulado Corrigido";
+            
+            // Renderizar MathJax para recálculo caso necessário
+            MathJax.typesetPromise();
+            
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
